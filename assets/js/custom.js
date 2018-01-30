@@ -78,7 +78,6 @@ $('.tooltip-error').click(function (e) {
     };
 });
 
-/*
 $("#usuarioForm").validate({
     ignore: 'input[type=hidden], .select2-search__field', 
     errorClass: 'validation-error-label',
@@ -233,7 +232,6 @@ $("#usuarioForm").validate({
         return false;
     }
 });
-*/
 
 $("#formLogin").validate({
     errorElement: 'span',
@@ -417,7 +415,7 @@ $('form#mensualidadForm').validate({
     }
 });
 
-$('form#mensualidadForm').validate({
+$('form#constanciaForm').validate({
     errorElement: 'span',
     errorClass: 'help-inline',
     focusInvalid: false,
@@ -429,13 +427,16 @@ $('form#mensualidadForm').validate({
         nombre: {
             required: true
         },
-        banco: {
+        dirigido: {
             required: true
         },
-        comprobante: {
+        tiempo: {
             required: true
         },
-        mes: {
+        telefono: {
+            required: true
+        },
+        tipo: {
             required: true
         }
     },
@@ -444,17 +445,20 @@ $('form#mensualidadForm').validate({
             required: "Ingrese un número de cédula",
             number: "Ingrese solo números"
         },
-        banco: {
-            required: "Seleccione el banco"
-        },
         nombre: {
             required: "Ingrese un nombre"
         },
-        comprobante: {
-            required: "Ingrese el número de comprobante"
+        dirigido: {
+            required: "Ingrese el nombre a quien va dirigido"
         },
-        mes: {
-            required: "Seleccione el mes"
+        tiempo: {
+            required: "Ingrese el tiempo que tiene en la empresa"
+        },
+        telefono: {
+            required: "Ingrese el número de teléfono"
+        },
+        tipo: {
+            required: "Seleccione el tipo de constancia"
         }
     },
     invalidHandler: function (event, validator) { //display error alert on form submit   
@@ -485,16 +489,16 @@ $('form#mensualidadForm').validate({
     },
     submitHandler: function (form) {
         var token = $("input[name=_token]").val();
-        var formData = new FormData($("form#mensualidadForm")[0]);
+        var formData = new FormData($("form#constanciaForm")[0]);
         $.ajax({
-            url:  $("form#mensualidadForm").attr('action'),
-            type: $("form#mensualidadForm").attr('method'),
+            url:  $("form#constanciaForm").attr('action'),
+            type: $("form#constanciaForm").attr('method'),
             headers: {'X-CSRF-TOKEN' : token},
             data: formData,
             processData: false,
             contentType: false,
             beforeSend:function(){
-                $("button#mensualidadSubmit").addClass('disabled');
+                $("button#constanciaSubmit").addClass('disabled');
                 $("button#cancelar").addClass('disabled');
             },
             success:function(response){
@@ -515,22 +519,696 @@ $('form#mensualidadForm').validate({
                     });
                 }
                 else if(response.validations == true){
-                    if($("button#mensualidadSubmit").attr('data') == 1)
+                    if($("button#constanciaSubmit").attr('data') == 1)
                         action = 'agregada';
-                    else if($("button#mensualidadSubmit").attr('data') == 0)
+                    else if($("button#constanciaSubmit").attr('data') == 0)
                         action = 'actualizada';
-                    alertMessage = 'Mensualidad '+action+' satisfactoriamente';
+                    alertMessage = 'Constancia '+action+' satisfactoriamente';
                     $.gritter.add({
                         title: 'Registrado',
                         text: alertMessage,
                         class_name: 'gritter-success'
                     });
-                    if($("button#mensualidadSubmit").attr('data') == 1){
-                        $('form#mensualidadForm').reset();
+                    if($("button#constanciaSubmit").attr('data') == 1){
+                        $('form#constanciaForm').reset();
                         $(document).find('.validation-valid-label').remove();
                     }
                 }
-                $("button#mensualidadSubmit").button('reset');
+                $("button#constanciaSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#personalForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        cargo: {
+            required: true
+        },
+        nombre: {
+            required: true
+        },
+        edad: {
+            required: true
+        },
+        tiempo: {
+            required: true
+        },
+        telefono: {
+            required: true
+        },
+        tipo: {
+            required: true
+        }
+    },
+    messages: {
+        cargo: {
+            required: "Ingrese un cargo"
+        },
+        nombre: {
+            required: "Ingrese un nombre"
+        },
+        edad: {
+            required: "Ingrese la edad"
+        },
+        tiempo: {
+            required: "Ingrese el tiempo que tiene en la empresa"
+        },
+        telefono: {
+            required: "Ingrese el número de teléfono"
+        },
+        tipo: {
+            required: "Seleccione el tipo de personal"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#personalForm")[0]);
+        $.ajax({
+            url:  $("form#personalForm").attr('action'),
+            type: $("form#personalForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#personalSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    //alertMessage = "<b>Campos únicos:</b> <br>";
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#personalSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#personalSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Personal '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#personalSubmit").attr('data') == 1){
+                        $('form#personalForm').reset();
+                        $(document).find('.validation-valid-label').remove();
+                    }
+                }
+                $("button#personalSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#eventoForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        fecha: {
+            required: true
+        },
+        lugar: {
+            required: true
+        },
+        participantes: {
+            required: true
+        }
+    },
+    messages: {
+        fecha: {
+            required: "Ingrese una fehca"
+        },
+        lugar: {
+            required: "Ingrese un lugar"
+        },
+        participantes: {
+            required: "Ingrese los participantes"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#eventoForm")[0]);
+        $.ajax({
+            url:  $("form#eventoForm").attr('action'),
+            type: $("form#eventoForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#eventoSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    //alertMessage = "<b>Campos únicos:</b> <br>";
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#eventoSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#eventoSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Evento '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#eventoSubmit").attr('data') == 1){
+                        $('form#eventoForm').reset();
+                        $(document).find('.validation-valid-label').remove();
+                    }
+                }
+                $("button#eventoSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#cursoForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        curso: {
+            required: true
+        },
+        lugar: {
+            required: true
+        },
+        horario: {
+            required: true
+        },
+        profesor: {
+            required: true
+        }
+    },
+    messages: {
+        curso: {
+            required: "Ingrese un curso"
+        },
+        lugar: {
+            required: "Ingrese un lugar"
+        },
+        horario: {
+            required: "Ingrese el horario"
+        },
+        profesor: {
+            required: "Ingrese el profesor"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#cursoForm")[0]);
+        $.ajax({
+            url:  $("form#cursoForm").attr('action'),
+            type: $("form#cursoForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#cursoSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    //alertMessage = "<b>Campos únicos:</b> <br>";
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#cursoSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#cursoSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Curso '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#cursoSubmit").attr('data') == 1){
+                        $('form#cursoForm').reset();
+                        $(document).find('.validation-valid-label').remove();
+                    }
+                }
+                $("button#cursoSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#horarioForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        horario: {
+            required: true
+        },
+        profesor: {
+            required: true
+        }
+    },
+    messages: {
+        horario: {
+            required: "Ingrese el horario"
+        },
+        profesor: {
+            required: "Ingrese el profesor"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#horarioForm")[0]);
+        $.ajax({
+            url:  $("form#horarioForm").attr('action'),
+            type: $("form#horarioForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#horarioSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    //alertMessage = "<b>Campos únicos:</b> <br>";
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#horarioSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#horarioSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Horario '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#horarioSubmit").attr('data') == 1){
+                        $('form#horarioForm').reset();
+                        $(document).find('.validation-valid-label').remove();
+                    }
+                }
+                $("button#horarioSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#sugerenciaForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        nombre: {
+            required: true
+        },
+        sugerencia: {
+            required: true
+        }
+    },
+    messages: {
+        nombre: {
+            required: "Ingrese un nombre"
+        },
+        sugerencia: {
+            required: "Ingrese la sugerencia u opinión"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#sugerenciaForm")[0]);
+        $.ajax({
+            url:  $("form#sugerenciaForm").attr('action'),
+            type: $("form#sugerenciaForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#sugerenciaSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    //alertMessage = "<b>Campos únicos:</b> <br>";
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#sugerenciaSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#sugerenciaSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Sugerencia '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#sugerenciaSubmit").attr('data') == 1){
+                        $('form#sugerenciaForm').reset();
+                        $(document).find('.validation-valid-label').remove();
+                    }
+                }
+                $("button#sugerenciaSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#alumnoForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        edad: {
+            required: true,
+            number: true
+        },
+        nombre: {
+            required: true
+        },
+        comprobante: {
+            required: true
+        },
+        banco: {
+            required: true
+        }
+    },
+    messages: {
+        edad: {
+            required: "Ingrese una edad",
+            number: "Ingrese solo números"
+        },
+        nombre: {
+            required: "Ingrese un nombre"
+        },
+        comprobante: {
+            required: "Ingrese el número de comprobante"
+        },
+        banco: {
+            required: "Seleccione el tipo de constancia"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#alumnoForm")[0]);
+        $.ajax({
+            url:  $("form#alumnoForm").attr('action'),
+            type: $("form#alumnoForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#alumnoSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    //alertMessage = "<b>Campos únicos:</b> <br>";
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#alumnoSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#alumnoSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Alumno '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#alumnoSubmit").attr('data') == 1){
+                        $('form#alumnoForm').reset();
+                        $(document).find('.validation-valid-label').remove();
+                    }
+                }
+                $("button#alumnoSubmit").button('reset');
                 $("button#cancelar").removeClass('disabled');
             }
         })

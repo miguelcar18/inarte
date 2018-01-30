@@ -63,7 +63,7 @@ class MensualidadesRequest extends FormRequest
 
     public function attributes(){
         return [
-            'cedula'        => 'çédula', 
+            'cedula'        => 'cédula', 
             'nombre'        => 'nombre y apellido',
             'mes'           => 'mes',
             'banco'         => 'banco', 

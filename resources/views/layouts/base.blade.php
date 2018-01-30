@@ -51,6 +51,7 @@
 						<div class="span12">
 							<!--PAGE CONTENT BEGINS-->
 							@section('contenido')
+							@include('layouts.inicio')
 							@show
 							<!--PAGE CONTENT ENDS-->
 						</div><!--/.span-->
@@ -89,9 +90,6 @@
 
 		<!--page specific plugin scripts-->
 
-		@section('javascripts')
-		@show
-
 		<!--ace scripts-->
 
 		<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
@@ -100,7 +98,13 @@
 		<script src="{{ asset('assets/js/jquery.dataTables.bootstrap.js') }}"></script>
 		<script src="{{ asset('assets/js/ace-elements.min.js') }}"></script>
 		<script src="{{ asset('assets/js/ace.min.js') }}"></script>
+		<script src="{{ asset('assets/js/date-time/bootstrap-datepicker.min.js') }}"></script>
 		<script src="{{ asset('assets/js/custom.js') }}"></script>
+
+		<!--page specific plugin scripts-->
+
+		@section('javascripts')
+		@show
 
 		<!--inline scripts related to this page-->
 	</body>

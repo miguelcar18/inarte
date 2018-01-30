@@ -29,9 +29,147 @@
 				</li>
 			</ul>
 		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'constancias.index' or Route::getCurrentRoute()->getName() == 'constancias.show' or Route::getCurrentRoute()->getName() == 'constancias.edit' or Route::getCurrentRoute()->getName() == 'constancias.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-certificate"></i>
+				<span class="menu-text"> Constancias </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'constancias.index' or 
+        			Route::getCurrentRoute()->getName() == 'constancias.show' or 
+        			Route::getCurrentRoute()->getName() == 'constancias.edit') class="active" @endif>
+					<a href="{{ URL::route('constancias.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'constancias.create') class="active" @endif>
+					<a href="{{ URL::route('constancias.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or Route::getCurrentRoute()->getName() == 'personal.show' or Route::getCurrentRoute()->getName() == 'personal.edit' or Route::getCurrentRoute()->getName() == 'personal.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-briefcase"></i>
+				<span class="menu-text"> Personal </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or 
+					Route::getCurrentRoute()->getName() == 'personal.show' or 
+					Route::getCurrentRoute()->getName() == 'personal.edit') class="active" @endif>
+					<a href="{{ URL::route('personal.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'personal.create') class="active" @endif>
+					<a href="{{ URL::route('personal.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'eventos.index' or Route::getCurrentRoute()->getName() == 'eventos.show' or Route::getCurrentRoute()->getName() == 'eventos.edit' or Route::getCurrentRoute()->getName() == 'eventos.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-book"></i>
+				<span class="menu-text"> Eventos </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'eventos.index' or 
+					Route::getCurrentRoute()->getName() == 'eventos.show' or 
+					Route::getCurrentRoute()->getName() == 'eventos.edit') class="active" @endif>
+					<a href="{{ URL::route('eventos.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'eventos.create') class="active" @endif>
+					<a href="{{ URL::route('eventos.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'cursos.index' or Route::getCurrentRoute()->getName() == 'cursos.show' or Route::getCurrentRoute()->getName() == 'cursos.edit' or Route::getCurrentRoute()->getName() == 'cursos.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-bookmark"></i>
+				<span class="menu-text"> Cursos / Clases </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'cursos.index' or 
+					Route::getCurrentRoute()->getName() == 'cursos.show' or 
+					Route::getCurrentRoute()->getName() == 'cursos.edit') class="active" @endif>
+					<a href="{{ URL::route('cursos.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'cursos.create') class="active" @endif>
+					<a href="{{ URL::route('cursos.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'horarios.index' or Route::getCurrentRoute()->getName() == 'horarios.show' or Route::getCurrentRoute()->getName() == 'horarios.edit' or Route::getCurrentRoute()->getName() == 'horarios.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-edit"></i>
+				<span class="menu-text"> Horarios </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'horarios.index' or 
+					Route::getCurrentRoute()->getName() == 'horarios.show' or 
+					Route::getCurrentRoute()->getName() == 'horarios.edit') class="active" @endif>
+					<a href="{{ URL::route('horarios.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'horarios.create') class="active" @endif>
+					<a href="{{ URL::route('horarios.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'sugerencias.index' or Route::getCurrentRoute()->getName() == 'sugerencias.show' or Route::getCurrentRoute()->getName() == 'sugerencias.edit' or Route::getCurrentRoute()->getName() == 'sugerencias.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-comment"></i>
+				<span class="menu-text"> Sugerencias </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'sugerencias.index' or 
+					Route::getCurrentRoute()->getName() == 'sugerencias.show' or 
+					Route::getCurrentRoute()->getName() == 'sugerencias.edit') class="active" @endif>
+					<a href="{{ URL::route('sugerencias.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'sugerencias.create') class="active" @endif>
+					<a href="{{ URL::route('sugerencias.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
 		<li @if(Route::getCurrentRoute()->getName() == 'usuarios.index' or Route::getCurrentRoute()->getName() == 'usuarios.show' or Route::getCurrentRoute()->getName() == 'usuarios.edit' or Route::getCurrentRoute()->getName() == 'usuarios.create') class="active open" @endif>
 			<a href="#" class="dropdown-toggle">
-				<i class="icon-user"></i>
+				<i class="icon-group"></i>
 				<span class="menu-text"> Usuarios </span>
 				<b class="arrow icon-angle-down"></b>
 			</a>
