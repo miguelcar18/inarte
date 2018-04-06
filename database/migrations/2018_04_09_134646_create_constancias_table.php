@@ -15,12 +15,10 @@ class CreateConstanciasTable extends Migration
     {
         Schema::create('constancias', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cedula');
-            $table->string('nombre');
             $table->string('dirigido');
-            $table->string('tiempo');
             $table->string('tipo');
-            $table->string('telefono');
+            $table->integer('personal')->unsigned();
+            $table->foreign('personal')->references('id')->on('personal')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

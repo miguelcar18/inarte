@@ -72,7 +72,7 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td class="hidden-480">
-                    <a href="{{ URL::route('usuarios.show', $user->id) }}" data-rel="tooltip" title="Mostrar {{ $user->username }}" objeto="{{ $user->username }}"> 
+                    <a href="{{ URL::route('usuarios.show', $user->id) }}" data-rel="tooltip" title="Mostrar {{ $user->username }}" objeto="{{ $user->username }}" style="text-decoration:none;"> 
                         <span class="btn btn-mini btn-info"> <i class="icon-eye-open bigger-120"></i> </span> 
                     </a>
                     &nbsp;
@@ -80,7 +80,7 @@
                         <span class="btn btn-mini btn-success"> <i class="icon-pencil bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="#" data-id="{{ $user->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $user->username }}" objeto="{{ $user->username }}"> 
+                    <a href="#" data-id="{{ $user->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $user->username }}" objeto="{{ $user->username }}" style="text-decoration:none;"> 
                         <span class="btn btn-mini btn-danger"> <i class="icon-remove bigger-120"></i> </span> 
                     </a>
                 </td>
@@ -88,6 +88,8 @@
         @endforeach
 		</tbody>
 	</table>
+    {!! Form::open(array('route' => array('usuarios.destroy', 'USER_ID'), 'method' => 'DELETE', 'role' => 'form', 'id' => 'form-delete')) !!}
+    {!! Form::close() !!}
 </div>
 
 @stop

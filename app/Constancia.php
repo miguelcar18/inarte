@@ -19,6 +19,10 @@ class Constancia extends Model
      * @var array
      */
     protected $fillable = [
-        'dirigido', 'nombre', 'cedula', 'tiempo', 'telefono', 'tipo'
+        'dirigido', 'personal', 'tipo'
     ];
+
+    public function nombrePersonal(){
+        return $this->hasOne('App\Personal', 'id', 'personal');
+    }
 }

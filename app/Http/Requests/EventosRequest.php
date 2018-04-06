@@ -31,14 +31,14 @@ class EventosRequest extends FormRequest
                 return [
                     'fecha'         => 'required', 
                     'lugar'         => 'required', 
-                    'participantes' => 'required'
+                    'nombre'        => 'required'
                 ];
             }
             case 'PUT': {
                 return [
                     'fecha'         => 'required', 
                     'lugar'         => 'required', 
-                    'participantes' => 'required'
+                    'nombre'        => 'required'
                 ];
             }
             case 'PATCH': { return []; }
@@ -50,7 +50,7 @@ class EventosRequest extends FormRequest
         return [
             'fecha.required'            => 'El campo :attribute es obligatorio.', 
             'lugar.required'            => 'El campo :attribute es obligatorio.',
-            'participantes.required'    => 'El campo :attribute es obligatorio.' 
+            'nombre.required'    => 'El campo :attribute es obligatorio.' 
         ];
     }
 
@@ -58,7 +58,7 @@ class EventosRequest extends FormRequest
         return [
             'fecha'         => 'fecha', 
             'lugar'         => 'lugar',
-            'participantes' => 'participantes'
+            'nombre'        => 'nombre'
         ];
     }
 

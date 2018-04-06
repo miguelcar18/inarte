@@ -16,6 +16,10 @@
                 <td>{{ $evento->id }}</td>
             </tr>
             <tr>
+                <th>Nombre</th>
+                <td>{{ $evento->nombre }}</td>
+            </tr>
+            <tr>
                 <th>Fecha</th>
                 <td>{{ date_format(date_create($evento->fecha), 'd/m/Y') }}</td>
             </tr>
@@ -25,9 +29,14 @@
             </tr>
             <tr>
                 <th>Participantes</th>
-                <td>{{ $evento->participantes }}</td>
+                <td>
+                    <ul>
+                        @foreach($datos as $data)
+                        <li>{{ $data->nombreMatricula->cedula_nombre }}</li>
+                        @endforeach
+                    </ul>
+                </td>
             </tr>
-            <tr>
 				<td class="col-md-3 col-sm-4"><b>Acciones</b></td>
 				<td>
 					<button type="button" id="editar" name="editar" class="btn btn-success" onclick="document.location.href = '{{ URL::route('eventos.edit', $evento->id) }}'"> <i class="icon-pencil bigger-120"></i> Editar</button>

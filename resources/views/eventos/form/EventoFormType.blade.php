@@ -1,4 +1,12 @@
 <div class="control-group">
+	<label class="control-label" for="nombre">Nombre: <small class="text-error">*</small></label>
+	<div class="controls">
+		<div class="span12">
+			{{ Form::text("nombre", null, ["class" => "span6", "placeholder" => "Nombre del evento", "id" => "nombre", 'required' => true]) }}
+		</div>
+	</div>
+</div>
+<div class="control-group">
 	<label class="control-label" for="dirigido">Fecha: <small class="text-error">*</small></label>
 	<div class="controls">
 		<div class="span12">
@@ -19,14 +27,6 @@
 	<div class="controls">
 		<div class="span12">
 			{{ Form::text("lugar", null, ["class" => "span6", "placeholder" => "Lugar", "id" => "lugar", 'required' => true]) }}
-		</div>
-	</div>
-</div>
-<div class="control-group">
-	<label class="control-label" for="participantes">Participantes: <small class="text-error">*</small></label>
-	<div class="controls">
-		<div class="span12">
-			{{ Form::textarea("participantes", null, ["class" => "span6", "placeholder" => "Participantes", "id" => "participantes", 'required' => true]) }}
 		</div>
 	</div>
 </div>

@@ -15,15 +15,13 @@ Route::get('/', ['as' => 'principal', 'uses' => 'BackController@index']);
 Route::resource('usuarios', 'UserController');
 Route::resource('disciplinas', 'DisciplinasController');
 Route::resource('matriculas', 'MatriculasController');
-
 Route::resource('mensualidades', 'MensualidadesController');
 Route::resource('constancias', 'ConstanciasController');
 Route::resource('personal', 'PersonalController');
 Route::resource('eventos', 'EventosController');
 Route::resource('cursos', 'CursosController');
-Route::resource('horarios', 'HorariosController');
+//Route::resource('horarios', 'HorariosController');
 Route::resource('sugerencias', 'SugerenciasController');
-Route::resource('alumnos', 'AlumnosController');
 Auth::routes();
 Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 Route::get('restaurar-contrasena', ['as' => 'change_password', 'uses' =>'LoginController@changePassword']);

@@ -29,21 +29,15 @@ class ConstanciasRequest extends FormRequest
             case 'DELETE': { return []; }
             case 'POST': {
                 return [
-                    'cedula'    => 'required', 
-                    'nombre'    => 'required', 
+                    'personal'  => 'required', 
                     'dirigido'  => 'required', 
-                    'tiempo'    => 'required',
-                    'telefono'  => 'required', 
                     'tipo'      => 'required'
                 ];
             }
             case 'PUT': {
                 return [
-                    'cedula'    => 'required', 
-                    'nombre'    => 'required', 
+                    'personal'  => 'required', 
                     'dirigido'  => 'required', 
-                    'tiempo'    => 'required',
-                    'telefono'  => 'required', 
                     'tipo'      => 'required'
                 ];
             }
@@ -54,22 +48,16 @@ class ConstanciasRequest extends FormRequest
 
     public function messages(){
         return [
-            'cedula.required'   => 'El campo :attribute es obligatorio.', 
-            'nombre.required'   => 'El campo :attribute es obligatorio.',
+            'personal.required' => 'El campo :attribute es obligatorio.', 
             'dirigido.required' => 'El campo :attribute es obligatorio.', 
-            'tiempo.required'   => 'El campo :attribute es obligatorio.', 
-            'telefono.required' => 'El campo :attribute es obligatorio.', 
             'tipo.required'     => 'El campo :attribute es obligatorio.', 
         ];
     }
 
     public function attributes(){
         return [
-            'cedula'        => 'cédula', 
-            'nombre'        => 'nombre y apellido',
+            'personal'      => 'personal', 
             'dirigido'      => 'persona dirigida',
-            'tiempo'        => 'tiempo en la empresa', 
-            'telefono'      => 'teléfono', 
             'tipo'          => 'tipo de constancia'
         ];
     }

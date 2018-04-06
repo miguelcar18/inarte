@@ -17,19 +17,19 @@
             </tr>
             <tr>
                 <th width="25%">Cédula</th>
-                <td>{{ number_format($constancia->cedula, 0, '', '.') }}</td>
+                <td>{{ number_format($constancia->nombrePersonal->cedula, 0, '', '.') }}</td>
             </tr>
             <tr>
                 <th>Nombre y apellido</th>
-                <td>{{ $constancia->nombre }}</td>
+                <td>{{ $constancia->nombrePersonal->nombre }}</td>
             </tr>
             <tr>
-                <th>Tiempo en la empresa</th>
-                <td>{{ $constancia->tiempo }}</td>
+                <th>Fecha de ingreso</th>
+                <td>{{ date_format(date_create($constancia->nombrePersonal->fechaIngreso), 'd/m/Y') }}</td>
             </tr>
             <tr>
                 <th>Teléfono</th>
-                <td>{{ $constancia->telefono }}</td>
+                <td>{{ $constancia->nombrePersonal->telefono }}</td>
             </tr>
             <tr>
                 <th>Tipo de constancia</th>

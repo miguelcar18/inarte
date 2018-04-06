@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Evento;
+use App\Matricula;
+use App\MatriculasEvento;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventosRequest;
 use Session;
@@ -38,7 +40,8 @@ class EventosController extends Controller
      */
     public function create()
     {
-        return view('eventos.new');
+        $matriculas = array('' => "Seleccione") + Matricula::orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
+        return view('eventos.new', compact('matriculas'));
     }
 
     /**
@@ -54,11 +57,20 @@ class EventosController extends Controller
             $fechaSql     = $separarFecha[2].'-'.$separarFecha[1].'-'.$separarFecha[0];
 
             $campos = [
-                'fecha'          => $fechaSql, 
-                'lugar'          => $request['lugar'], 
-                'participantes'  => $request['participantes']
+                'fecha'     => $fechaSql, 
+                'lugar'     => $request['lugar'], 
+                'nombre'    => $request['nombre']
             ];
             Evento::create($campos);
+
+            $ultimoIdOrden = \DB::getPdo()->lastInsertId();
+            for($i = 0; $i < count($request['matriculaA']); $i++){
+                $camposCarga = [
+                    'matricula' => $request['matriculaA'][$i], 
+                    'evento'    => $ultimoIdOrden
+                ];
+                MatriculasEvento::create($camposCarga);
+            }
 
             return response()->json([
                 'validations' => true
@@ -74,7 +86,8 @@ class EventosController extends Controller
      */
     public function show(Evento $evento)
     {
-        return view('eventos.show', ['evento' => $evento]);
+        $datos = MatriculasEvento::where('evento', $evento->id)->get();
+        return view('eventos.show', ['evento' => $evento, 'datos' => $datos]);
     }
 
     /**
@@ -85,7 +98,9 @@ class EventosController extends Controller
      */
     public function edit(Evento $evento)
     {
-        return view('eventos.edit', ['evento' => $evento]);
+        $matriculas = array('' => "Seleccione") + Matricula::orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
+        $listado = MatriculasEvento::where('evento', $evento->id)->get();
+        return view('eventos.edit', ['evento' => $evento, 'matriculas' => $matriculas, 'listado' => $listado]);
     }
 
     /**
@@ -103,12 +118,30 @@ class EventosController extends Controller
             $fechaSql     = $separarFecha[2].'-'.$separarFecha[1].'-'.$separarFecha[0];
 
             $campos = [
-                'fecha'          => $fechaSql, 
-                'lugar'          => $request['lugar'], 
-                'participantes'  => $request['participantes']
+                'fecha'     => $fechaSql, 
+                'lugar'     => $request['lugar'], 
+                'nombre'    => $request['nombre']
             ];
             $evento->fill($campos);
             $evento->save();
+
+            for($i = 0; $i < count($request['matriculaA']); $i++){
+                $busqueda = MatriculasEvento::where('evento', $evento->id)->where('matricula', $request['matriculaA'][$i])->get();
+                if(count($busqueda) == 0){
+                    $camposCarga = [
+                        'matricula' => $request['matriculaA'][$i], 
+                        'evento'    => $evento->id
+                    ];
+                    MatriculasEvento::create($camposCarga);
+                }
+            }
+            $listadoCargados = MatriculasEvento::where('evento', $evento->id)->get();
+            foreach ($listadoCargados as $dato) {
+                if (!in_array($dato->matricula, $request['matriculaA'])) {
+                    MatriculasEvento::where('id', $dato->id)->delete();
+                }
+            }
+
             return response()->json([
                 'validations'       => true,
                 'nuevoContenido'    => $campos           
@@ -126,8 +159,9 @@ class EventosController extends Controller
     {
         if (is_null ($evento))
             \App::abort(404);
-        $nombreCompleto = $evento->fecha.' - '.$evento->lugar;
+        $nombreCompleto = $evento->nombre.' - '.date_format(date_create($evento->fecha), 'd/m/Y');
         $id = $evento->id;
+        $matriculasEvento = MatriculasEvento::where('evento', $id)->delete();
         $evento->delete();
         if (\Request::ajax()) {
             return Response::json(array (

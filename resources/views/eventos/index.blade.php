@@ -15,7 +15,7 @@
 		$(function() {
 			var oTable1 = $('#sample-table-2').dataTable({
 				"aoColumns": [
-					null, null,null,
+					null, null,null, null,
 					{ "bSortable": false }
 				], 
 				"oLanguage": {
@@ -59,6 +59,7 @@
 		<thead>
 			<tr>
 				<th>ID</th>
+				<th>Nombre</th>
                 <th>Fecha</th>
                 <th>Lugar</th>
                 <th>Acciones</th>
@@ -68,6 +69,7 @@
 			@foreach($eventos as $evento)
             <tr>
                 <td>{{ $evento->id }}</td>
+                <td>{{ $evento->nombre }}</td>
 				<td>{{ date_format(date_create($evento->fecha), 'd/m/Y') }}</td>
 				<td>{{ $evento->lugar }}</td>
                 <td class="hidden-480">

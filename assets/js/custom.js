@@ -566,48 +566,228 @@ $('form#mensualidadForm').validate({
     }
 });
 
+$('form#constanciaForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        dirigido: {
+            required: true
+        },
+        personal: {
+            required: true
+        },
+        tipo: {
+            required: true
+        }
+    },
+    messages: {
+        dirigido: {
+            required: "Ingrese el nombre a quien va dirigido"
+        },
+        personal: {
+            required: "Seleccione el personal que solicita la constancia"
+        },
+        tipo: {
+            required: "Seleccione el tipo de constancia"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
 
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
 
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#constanciaForm")[0]);
+        $.ajax({
+            url:  $("form#constanciaForm").attr('action'),
+            type: $("form#constanciaForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#constanciaSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#constanciaSubmit").attr('data') == 1)
+                        action = 'agregada';
+                    else if($("button#constanciaSubmit").attr('data') == 0)
+                        action = 'actualizada';
+                    alertMessage = 'Constancia '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#constanciaSubmit").attr('data') == 1){
+                        $('form#constanciaForm').reset();
+                        $(document).find('div.success').removeClass('success');
+                    }
+                }
+                $("button#constanciaSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#eventoForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        fecha: {
+            required: true
+        },
+        lugar: {
+            required: true
+        },
+        nombre: {
+            required: true
+        }
+    },
+    messages: {
+        fecha: {
+            required: "Ingrese una fehca"
+        },
+        lugar: {
+            required: "Ingrese un lugar"
+        },
+        nombre: {
+            required: "Ingrese un nombre"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#eventoForm")[0]);
+        $.ajax({
+            url:  $("form#eventoForm").attr('action'),
+            type: $("form#eventoForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#eventoSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#eventoSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#eventoSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Evento '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#eventoSubmit").attr('data') == 1){
+                        $('form#eventoForm').reset();
+                        $("#tablaParticipantes tbody > tr").remove();
+                        $(document).find('div.success').removeClass('success');
+                        $("#participantes").find("option").prop("disabled", false);
+                    }
+                }
+                $("button#eventoSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
 
 $("#usuarioForm").validate({
-    ignore: 'input[type=hidden], .select2-search__field', 
-    errorClass: 'validation-error-label',
-    successClass: 'validation-valid-label',
-    highlight: function(element, errorClass) {
-        $(element).removeClass(errorClass);
-    },
-    unhighlight: function(element, errorClass) {
-        $(element).removeClass(errorClass);
-    },
-    errorPlacement: function(error, element) {
-        if (element.parents('div').hasClass("checker") || element.parents('div').hasClass("choice") || element.parent().hasClass('bootstrap-switch-container') ) {
-            if(element.parents('label').hasClass('checkbox-inline') || element.parents('label').hasClass('radio-inline')) {
-                error.appendTo( element.parent().parent().parent().parent() );
-            }
-            else {
-                error.appendTo( element.parent().parent().parent().parent().parent() );
-            }
-        }
-        else if (element.parents('div').hasClass('checkbox') || element.parents('div').hasClass('radio')) {
-            error.appendTo( element.parent().parent().parent() );
-        }
-        else if (element.parents('div').hasClass('has-feedback') || element.hasClass('select2-hidden-accessible')) {
-            error.appendTo( element.parent() );
-        }
-        else if (element.parents('label').hasClass('checkbox-inline') || element.parents('label').hasClass('radio-inline')) {
-            error.appendTo( element.parent().parent() );
-        }
-        else if (element.parent().hasClass('uploader') || element.parents().hasClass('input-group')) {
-            error.appendTo( element.parent().parent() );
-        }
-        else {
-            error.insertAfter(element);
-        }
-    },
-    validClass: "validation-valid-label",
-    success: function(label) {
-        label.addClass("validation-valid-label").text("Correcto.")
-    },
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
     rules: {
         name: {
             required: true
@@ -626,7 +806,7 @@ $("#usuarioForm").validate({
             required: true,
             minlength: 6
         },
-        repeatPassword: {
+        password_repeat: {
             required: true,
             equalTo: "#password"
         }
@@ -649,10 +829,36 @@ $("#usuarioForm").validate({
             required: "Ingrese una contraseña",
             minlength: "Ingrese una contraseña con al menos 6 caracteres"
         },
-        repeatPassword: {
+        password_repeat: {
             required: "Confirme la contraseña ingresada",
             equalTo: "Ambas contraseñas deben ser iguales"
         }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
     },
     submitHandler: function () {
         var token = $("input[name=_token]").val();
@@ -673,19 +879,14 @@ $("#usuarioForm").validate({
                 var alertMessage = '';
                 var count = 0;
                 if(response.validations == false){
-                    //alertMessage = "<b>Campos únicos:</b> <br>";
                     $.each(response.errors, function(index, value){
                         count++;
                         alertMessage+= count+". "+value+"<br>";
                     });
-                    noty({
-                        width: 200,
+                    $.gritter.add({
+                        title: 'Información',
                         text: alertMessage,
-                        type: "information",
-                        dismissQueue: true,
-                        timeout: 10000,
-                        layout: "topRight",
-                        buttons: false
+                        class_name: 'gritter-error'
                     });
                 }
                 else if(response.validations == true){
@@ -694,14 +895,10 @@ $("#usuarioForm").validate({
                     else if($("button#usuarioSubmit").attr('data') == 0)
                         action = 'actualizado';
                     alertMessage = 'Usuario '+action+' satisfactoriamente';
-                    noty({
-                        width: 200,
+                    $.gritter.add({
+                        title: 'Registrado',
                         text: alertMessage,
-                        type: "success",
-                        dismissQueue: true,
-                        timeout: 4000,
-                        layout: "topCenter",
-                        buttons: false
+                        class_name: 'gritter-success'
                     });
                     if($("button#usuarioSubmit").attr('data') == 1){
                         $('form#usuarioForm').reset();
@@ -723,6 +920,228 @@ $("#usuarioForm").validate({
         return false;
     }
 });
+
+$("#usuarioEditForm").validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        name: {
+            required: true
+        },
+        email: {
+            required: true,
+            email: true
+        },
+        username: {
+            required: true
+        },
+        rol: {
+            required: true
+        }
+    },
+    messages: {
+        name: {
+            required: "Ingrese un nombre y apellido"
+        },
+        email: {
+            required: "Ingrese un emal",
+            email: "Ingrese un email válido"
+        },
+        username: {
+            required: "Ingrese un nombre de usuario"
+        },
+        rol: {
+            required: "Seleccione un rol"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function () {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#usuarioEditForm")[0]);
+        $.ajax({
+            url:  $("form#usuarioEditForm").attr('action'),
+            type: $("form#usuarioEditForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#usuarioSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var action = '';
+                var alertMessage = '';
+                var count = 0;
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#usuarioSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#usuarioSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Usuario '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#usuarioSubmit").attr('data') == 1){
+                        $('form#usuarioEditForm').reset();
+                        $(document).find('div.success').removeClass('success');
+                    }
+                    else if($("button#usuarioSubmit").attr('data') == 0){
+                        var imagenActual = $('#fotoNavbar').attr("src").split("/uploads/");
+                        var ruta = imagenActual[0]+"/uploads/usuarios/"+response.photo;
+                        //$('#fotoNavbar').attr("src", ruta);
+                        //$('#fotoSidebar').attr("src", ruta);
+                        //$('#fotoNavbar').attr("src", ruta);
+                    }
+                }
+                $("button#usuarioSubmit").removeClass('disabled');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    }
+});
+
+$("#changePasswordForm").validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        password_actual: {
+            required: true,
+            minlength: 6
+        },
+        password: {
+            required: true,
+            minlength: 6
+        },
+        password_confirmation: {
+            required: true,
+            equalTo: "#password"
+        }
+    },
+    messages: {
+        password_actual: {
+            required: 'Ingrese su contraseña actual'
+        },
+        password: {
+            required: "Ingrese su nueva contraseña",
+            minlength: jQuery.validator.format("Debe ingresar al menos {0} caracteres")
+        },
+        password_confirmation: {
+            required: 'Repita la nueva contraseña',
+            equalTo: 'Las contraseñas deben de ser iguales'
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function () {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#changePasswordForm")[0]);
+        $.ajax({
+            url:  $("form#changePasswordForm").attr('action'),
+            type: $("form#changePasswordForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#passwordSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var action = '';
+                var alertMessage = '';
+                var count = 0;
+                if(response.message == "error"){
+                    $.gritter.add({
+                        title: 'Información',
+                        text: 'La contraseña acutal ingresada es incorrecta.',
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.message == "correcto"){
+                    action = 'actualizada';
+                    alertMessage = 'Contraseña '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    $('form#changePasswordForm').reset();
+                    $(document).find('.validation-valid-label').remove();
+                }
+                $("button#passwordSubmit").removeClass('disabled');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    }
+});
+
 
 $("#formLogin").validate({
     errorElement: 'span',
@@ -800,244 +1219,6 @@ $("#formLogin").validate({
             }
         })
         return false;
-    }
-});
-
-$('form#constanciaForm').validate({
-    errorElement: 'span',
-    errorClass: 'help-inline',
-    focusInvalid: false,
-    rules: {
-        cedula: {
-            required: true,
-            number: true
-        },
-        nombre: {
-            required: true
-        },
-        dirigido: {
-            required: true
-        },
-        tiempo: {
-            required: true
-        },
-        telefono: {
-            required: true
-        },
-        tipo: {
-            required: true
-        }
-    },
-    messages: {
-        cedula: {
-            required: "Ingrese un número de cédula",
-            number: "Ingrese solo números"
-        },
-        nombre: {
-            required: "Ingrese un nombre"
-        },
-        dirigido: {
-            required: "Ingrese el nombre a quien va dirigido"
-        },
-        tiempo: {
-            required: "Ingrese el tiempo que tiene en la empresa"
-        },
-        telefono: {
-            required: "Ingrese el número de teléfono"
-        },
-        tipo: {
-            required: "Seleccione el tipo de constancia"
-        }
-    },
-    invalidHandler: function (event, validator) { //display error alert on form submit   
-        $('.alert-error', $('.login-form')).show();
-    },
-
-    highlight: function (e) {
-        $(e).closest('.control-group').removeClass('info').addClass('error');
-    },
-
-    success: function (e) {
-        $(e).closest('.control-group').removeClass('error').addClass('success');
-        $(e).remove();
-    },
-    errorPlacement: function (error, element) {
-        if(element.is(':checkbox') || element.is(':radio')) {
-            var controls = element.closest('.controls');
-            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-        }
-        else if(element.is('.select2')) {
-            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-        }
-        else if(element.is('.chzn-select')) {
-            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
-        }
-        else error.insertAfter(element);
-    },
-    submitHandler: function (form) {
-        var token = $("input[name=_token]").val();
-        var formData = new FormData($("form#constanciaForm")[0]);
-        $.ajax({
-            url:  $("form#constanciaForm").attr('action'),
-            type: $("form#constanciaForm").attr('method'),
-            headers: {'X-CSRF-TOKEN' : token},
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend:function(){
-                $("button#constanciaSubmit").addClass('disabled');
-                $("button#cancelar").addClass('disabled');
-            },
-            success:function(response){
-                var accion = '';
-                var alertMessage = '';
-                var count = 0;
-
-                if(response.validations == false){
-                    //alertMessage = "<b>Campos únicos:</b> <br>";
-                    $.each(response.errors, function(index, value){
-                        count++;
-                        alertMessage+= count+". "+value+"<br>";
-                    });
-                    $.gritter.add({
-                        title: 'Información',
-                        text: alertMessage,
-                        class_name: 'gritter-error'
-                    });
-                }
-                else if(response.validations == true){
-                    if($("button#constanciaSubmit").attr('data') == 1)
-                        action = 'agregada';
-                    else if($("button#constanciaSubmit").attr('data') == 0)
-                        action = 'actualizada';
-                    alertMessage = 'Constancia '+action+' satisfactoriamente';
-                    $.gritter.add({
-                        title: 'Registrado',
-                        text: alertMessage,
-                        class_name: 'gritter-success'
-                    });
-                    if($("button#constanciaSubmit").attr('data') == 1){
-                        $('form#constanciaForm').reset();
-                        $(document).find('div.success').removeClass('success');
-                    }
-                }
-                $("button#constanciaSubmit").button('reset');
-                $("button#cancelar").removeClass('disabled');
-            }
-        })
-        return false;
-    },
-    invalidHandler: function (form) {
-    }
-});
-
-$('form#eventoForm').validate({
-    errorElement: 'span',
-    errorClass: 'help-inline',
-    focusInvalid: false,
-    rules: {
-        fecha: {
-            required: true
-        },
-        lugar: {
-            required: true
-        },
-        participantes: {
-            required: true
-        }
-    },
-    messages: {
-        fecha: {
-            required: "Ingrese una fehca"
-        },
-        lugar: {
-            required: "Ingrese un lugar"
-        },
-        participantes: {
-            required: "Ingrese los participantes"
-        }
-    },
-    invalidHandler: function (event, validator) { //display error alert on form submit   
-        $('.alert-error', $('.login-form')).show();
-    },
-
-    highlight: function (e) {
-        $(e).closest('.control-group').removeClass('info').addClass('error');
-    },
-
-    success: function (e) {
-        $(e).closest('.control-group').removeClass('error').addClass('success');
-        $(e).remove();
-    },
-    errorPlacement: function (error, element) {
-        if(element.is(':checkbox') || element.is(':radio')) {
-            var controls = element.closest('.controls');
-            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-        }
-        else if(element.is('.select2')) {
-            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-        }
-        else if(element.is('.chzn-select')) {
-            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
-        }
-        else error.insertAfter(element);
-    },
-    submitHandler: function (form) {
-        var token = $("input[name=_token]").val();
-        var formData = new FormData($("form#eventoForm")[0]);
-        $.ajax({
-            url:  $("form#eventoForm").attr('action'),
-            type: $("form#eventoForm").attr('method'),
-            headers: {'X-CSRF-TOKEN' : token},
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend:function(){
-                $("button#eventoSubmit").addClass('disabled');
-                $("button#cancelar").addClass('disabled');
-            },
-            success:function(response){
-                var accion = '';
-                var alertMessage = '';
-                var count = 0;
-
-                if(response.validations == false){
-                    //alertMessage = "<b>Campos únicos:</b> <br>";
-                    $.each(response.errors, function(index, value){
-                        count++;
-                        alertMessage+= count+". "+value+"<br>";
-                    });
-                    $.gritter.add({
-                        title: 'Información',
-                        text: alertMessage,
-                        class_name: 'gritter-error'
-                    });
-                }
-                else if(response.validations == true){
-                    if($("button#eventoSubmit").attr('data') == 1)
-                        action = 'agregado';
-                    else if($("button#eventoSubmit").attr('data') == 0)
-                        action = 'actualizado';
-                    alertMessage = 'Evento '+action+' satisfactoriamente';
-                    $.gritter.add({
-                        title: 'Registrado',
-                        text: alertMessage,
-                        class_name: 'gritter-success'
-                    });
-                    if($("button#eventoSubmit").attr('data') == 1){
-                        $('form#eventoForm').reset();
-                        $(document).find('div.success').removeClass('success');
-                    }
-                }
-                $("button#eventoSubmit").button('reset');
-                $("button#cancelar").removeClass('disabled');
-            }
-        })
-        return false;
-    },
-    invalidHandler: function (form) {
     }
 });
 
@@ -1362,119 +1543,39 @@ $('form#sugerenciaForm').validate({
     }
 });
 
-$('form#alumnoForm').validate({
-    errorElement: 'span',
-    errorClass: 'help-inline',
-    focusInvalid: false,
-    rules: {
-        edad: {
-            required: true,
-            number: true
-        },
-        nombre: {
-            required: true
-        },
-        comprobante: {
-            required: true
-        },
-        banco: {
-            required: true
-        }
-    },
-    messages: {
-        edad: {
-            required: "Ingrese una edad",
-            number: "Ingrese solo números"
-        },
-        nombre: {
-            required: "Ingrese un nombre"
-        },
-        comprobante: {
-            required: "Ingrese el número de comprobante"
-        },
-        banco: {
-            required: "Seleccione el tipo de constancia"
-        }
-    },
-    invalidHandler: function (event, validator) { //display error alert on form submit   
-        $('.alert-error', $('.login-form')).show();
-    },
+function eliminarFila(fila) {
+    var valor = fila.parentNode.previousSibling.childNodes[0].value;
+    $("#participantes").find("option[value='"+valor+"']").prop("disabled", false);
+    fila.parentNode.parentNode.remove();
+}
 
-    highlight: function (e) {
-        $(e).closest('.control-group').removeClass('info').addClass('error');
-    },
+function eliminarFilaEditar(fila) {
+    var valor = fila.parentNode.previousSibling.previousSibling.childNodes[1].value;
+    $("#participantes").find("option[value='"+valor+"']").prop("disabled", false);
+    fila.parentNode.parentNode.remove();
+}
 
-    success: function (e) {
-        $(e).closest('.control-group').removeClass('error').addClass('success');
-        $(e).remove();
-    },
-    errorPlacement: function (error, element) {
-        if(element.is(':checkbox') || element.is(':radio')) {
-            var controls = element.closest('.controls');
-            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-        }
-        else if(element.is('.select2')) {
-            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-        }
-        else if(element.is('.chzn-select')) {
-            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
-        }
-        else error.insertAfter(element);
-    },
-    submitHandler: function (form) {
-        var token = $("input[name=_token]").val();
-        var formData = new FormData($("form#alumnoForm")[0]);
-        $.ajax({
-            url:  $("form#alumnoForm").attr('action'),
-            type: $("form#alumnoForm").attr('method'),
-            headers: {'X-CSRF-TOKEN' : token},
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend:function(){
-                $("button#alumnoSubmit").addClass('disabled');
-                $("button#cancelar").addClass('disabled');
-            },
-            success:function(response){
-                var accion = '';
-                var alertMessage = '';
-                var count = 0;
+function agregarValor() {
+    var tabla = document.getElementById("tablaParticipantes").tBodies[0];
+    var participante = document.getElementById("participantes").value;
+    var combo = document.getElementById("participantes");
+    var selected = combo.options[combo.selectedIndex].text;
 
-                if(response.validations == false){
-                    //alertMessage = "<b>Campos únicos:</b> <br>";
-                    $.each(response.errors, function(index, value){
-                        count++;
-                        alertMessage+= count+". "+value+"<br>";
-                    });
-                    $.gritter.add({
-                        title: 'Información',
-                        text: alertMessage,
-                        class_name: 'gritter-error'
-                    });
-                }
-                else if(response.validations == true){
-                    if($("button#alumnoSubmit").attr('data') == 1)
-                        action = 'agregado';
-                    else if($("button#alumnoSubmit").attr('data') == 0)
-                        action = 'actualizado';
-                    alertMessage = 'Alumno '+action+' satisfactoriamente';
-                    $.gritter.add({
-                        title: 'Registrado',
-                        text: alertMessage,
-                        class_name: 'gritter-success'
-                    });
-                    if($("button#alumnoSubmit").attr('data') == 1){
-                        $('form#alumnoForm').reset();
-                        $(document).find('div.success').removeClass('success');
-                    }
-                }
-                $("button#alumnoSubmit").button('reset');
-                $("button#cancelar").removeClass('disabled');
-            }
-        })
-        return false;
-    },
-    invalidHandler: function (form) {
+    if(participante == "") {
+        $.gritter.add({
+            title: 'Información',
+            text: "Seleccione un participante",
+            class_name: 'gritter-info'
+        });
     }
-});
+    else {
+        var fila = tabla.insertRow(-1);
+        var celda0 = fila.insertCell(0);
+        var celda1 = fila.insertCell(1);
+
+        celda0.innerHTML = '<input type="hidden" name="matriculaA[]" id="matriculaA[]" value="'+participante+'" />'+selected;
+        celda1.innerHTML = '<button type="button" onclick="eliminarFila(this)" class="btn btn-mini btn-danger"><i class="icon-trash bigger-120"></i></button>';
+        $("#participantes").find(":selected").prop("disabled", true);
+        $('#participantes').val('');
+    }
+}

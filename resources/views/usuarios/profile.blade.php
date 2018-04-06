@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('titulo')Perfil - FundaUdo@stop
+@section('titulo')<title>Perfil de usuario- Inarte</title>@stop
 
 @section('cabecera')
 @include('layouts.breadcrumb', ['titulo' => "Perfil de usuario", 'tituloModulo' => "Usuarios", 'rutaModulo' => URL::route('usuarios.index'), 'tituloSubmodulo' => "Perfil de usuario"])
@@ -9,28 +9,52 @@
 @section('contenido')
 	<div class="panel panel-flat">
 		<div class="panel-body">
-			<div class="row">
-				<div class="col-lg-4 col-md-6 col-lg-offset-4 col-md-offset-3">
-					<div class="thumbnail">
-						<div class="thumb thumb-rounded">
-							@if($user->path == '')
-							<img name="fotoActual" id="fotoActual" src="{{ asset('uploads/usuarios/unfile.jpg') }}" class="img-responsive" alt="" width="150px" height="auto">
-							@else
-							<img name="fotoActual" id="fotoActual" src="{{ asset('uploads/usuarios/'.$user->path) }}" class="img-responsive" alt="" width="150px" height="auto">
-							@endif
-						</div>
-						<div class="caption text-center">
-							<h4 class="text-semibold no-margin">{{ $user->name }}</h4>
-							<h4 class="text-semibold no-margin">
-								@if($user->rol == 1)
-								Administrador
-								@elseif($user->rol == 0)
-								Usuario
+			<div>
+				<div id="user-profile-1" class="user-profile row-fluid">
+					<div class="span3 center">
+						<div>
+							<span class="profile-picture">
+								@if($user->path == '')
+								<img name="fotoActual" id="fotoActual" src="{{ asset('uploads/usuarios/unfile.png') }}" class="editable" alt="{{ $user->username }} Avatar" src="{{ asset('uploads/usuarios/unfile.jpg') }}" />
+								@else
+								<img name="fotoActual" id="fotoActual" src="{{ asset('uploads/usuarios/'.$user->path) }}" class="editable" alt="{{ $user->username }} Avatar" />
 								@endif
-							</h4>
-							<h4 class="text-semibold no-margin">{{ $user->username }}</h4>
-							<h4 class="text-semibold no-margin">{{ $user->email }}</h4>
-							<h4 class="text-semibold no-margin">{{ $user->details }}</h4>
+							</span>
+							<div class="space-4"></div>
+							<div class="width-80 label label-info label-large arrowed-in arrowed-in-right">
+								<div class="inline position-relative">
+									<span class="white middle bigger-120">{{ $user->username }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="span9">
+						<div class="profile-user-info profile-user-info-striped">
+							<div class="profile-info-row">
+								<div class="profile-info-name"> Nombre </div>
+								<div class="profile-info-value">
+									<span class="" id="name">{{ $user->name }}</span>
+								</div>
+							</div>
+							<div class="profile-info-row">
+								<div class="profile-info-name"> Rol </div>
+
+								<div class="profile-info-value">
+									@if($user->rol == 1)
+									<i class="icon-briefcase light-orange bigger-110"></i>
+									<span class="" id="rol">Administrador</span>
+									@elseif($user->rol == 0)
+									<i class="icon-user light-orange bigger-110"></i>
+									<span class="" id="rol">Usuario</span>
+									@endif
+								</div>
+							</div>
+							<div class="profile-info-row">
+								<div class="profile-info-name"> Email </div>
+								<div class="profile-info-value">
+									<span class="" id="email">{{ $user->email }}</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

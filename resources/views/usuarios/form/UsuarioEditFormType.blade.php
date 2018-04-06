@@ -30,3 +30,11 @@
 		</div>
 	</div>
 </div>
+<div class="control-group">
+	<label class="control-label" for="rol">Rol: <small class="text-error">*</small></label>
+	<div class="controls">
+		<div class="span12">
+			{!! Form::select('rol', ["" => "Seleccione una opción", "1" => "Administrador", "0" => "Usuario"], null, ['id' => 'rol', 'class' => 'span6', 'required' => true]) !!}
+		</div>
+	</div>
+</div>

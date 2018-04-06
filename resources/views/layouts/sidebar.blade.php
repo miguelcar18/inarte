@@ -52,9 +52,6 @@
 				</li>
 			</ul>
 		</li>
-
-
-
 		<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or Route::getCurrentRoute()->getName() == 'personal.show' or Route::getCurrentRoute()->getName() == 'personal.edit' or Route::getCurrentRoute()->getName() == 'personal.create') class="active open" @endif>
 			<a href="#" class="dropdown-toggle">
 				<i class="icon-briefcase"></i>
@@ -170,6 +167,7 @@
 				</li>
 			</ul>
 		</li>
+		{{--
 		<li @if(Route::getCurrentRoute()->getName() == 'horarios.index' or Route::getCurrentRoute()->getName() == 'horarios.show' or Route::getCurrentRoute()->getName() == 'horarios.edit' or Route::getCurrentRoute()->getName() == 'horarios.create') class="active open" @endif>
 			<a href="#" class="dropdown-toggle">
 				<i class="icon-edit"></i>
@@ -193,6 +191,7 @@
 				</li>
 			</ul>
 		</li>
+		--}}
 		<li @if(Route::getCurrentRoute()->getName() == 'sugerencias.index' or Route::getCurrentRoute()->getName() == 'sugerencias.show' or Route::getCurrentRoute()->getName() == 'sugerencias.edit' or Route::getCurrentRoute()->getName() == 'sugerencias.create') class="active open" @endif>
 			<a href="#" class="dropdown-toggle">
 				<i class="icon-comment"></i>

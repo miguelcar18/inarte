@@ -60,8 +60,8 @@ class UserController extends Controller
     public function store(UserCreateRequest $request)
     {
         if($request->ajax()) {
-            if(!empty($request->file('foto'))) {
-                $file = $request->file('foto');
+            if(!empty($request->file('file'))) {
+                $file = $request->file('file');
                 $nombre = str_replace(':', '_', Carbon::now()->toDateTimeString().$file->getClientOriginalName());
                 $nombre = str_replace(' ', '_', $nombre);
                 \Storage::disk('users')->put($nombre,  \File::get($file));
@@ -75,8 +75,7 @@ class UserController extends Controller
                 'rol'       => $request['rol'], 
                 'username'  => $request['username'], 
                 'password'  => bcrypt($request['password']), 
-                'path'      => $nombre,
-                'details'   => $request['details']
+                'path'      => $nombre
             ]);
             
             return response()->json([
@@ -121,9 +120,9 @@ class UserController extends Controller
         $user = User::find($id);
         //if((Auth::user()->rol == 1 || Auth::user()->id == $id) && $request->ajax()){
         if($request->ajax()){
-            if(!empty($request->file('foto')) and $request->file('foto') != ''){
+            if(!empty($request->file('file')) and $request->file('file') != ''){
                 \File::delete('uploads/usuarios/'.$user->path);
-                $file = $request->file('foto');
+                $file = $request->file('file');
                 $nombre = str_replace(':', '_', Carbon::now()->toDateTimeString().$file->getClientOriginalName());
                 $nombre = str_replace(' ', '_', $nombre);
                 \Storage::disk('users')->put($nombre,  \File::get($file));
@@ -136,7 +135,6 @@ class UserController extends Controller
                 'name'      => $request['name'],
                 'email'     => $request['email'], 
                 'rol'       => $request['rol'], 
-                'details'   => $request['details'],
                 'path'      => $nombre
                 ]);
             $user->save();
@@ -163,10 +161,10 @@ class UserController extends Controller
         if (is_null ($user)){
             \App::abort(404);
         }
+        \File::delete('uploads/usuarios/'.$user->path);
         $user->delete();
 
         if (\Request::ajax()){
-            \File::delete('uploads/users/'.$user->path);
             return Response::json(array (
                 'success' => true,
                 'msg'     => 'Usuario "' . $user->username . '" eliminado satisfactoriamente',

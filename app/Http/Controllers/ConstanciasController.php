@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constancia;
+use App\Personal;
 use Illuminate\Http\Request;
 use App\Http\Requests\ConstanciasRequest;
 use Session;
@@ -38,7 +39,8 @@ class ConstanciasController extends Controller
      */
     public function create()
     {
-        return view('constancias.new');
+        $personals = array('' => "Seleccione") + Personal::orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
+        return view('constancias.new', compact('personals'));
     }
 
     /**
@@ -52,10 +54,7 @@ class ConstanciasController extends Controller
         if($request->ajax()){
             $campos = [
                 'dirigido'  => $request['dirigido'], 
-                'nombre'    => $request['nombre'], 
-                'cedula'    => $request['cedula'], 
-                'tiempo'    => $request['tiempo'], 
-                'telefono'  => $request['telefono'], 
+                'personal'  => $request['personal'], 
                 'tipo'      => $request['tipo']
             ];
             Constancia::create($campos);
@@ -84,7 +83,8 @@ class ConstanciasController extends Controller
      */
     public function edit(Constancia $constancia)
     {
-        return view('constancias.edit', ['constancia' => $constancia]);
+        $personals = array('' => "Seleccione") + Personal::orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
+        return view('constancias.edit', ['constancia' => $constancia, 'personals' => $personals]);
     }
 
     /**
@@ -100,10 +100,7 @@ class ConstanciasController extends Controller
         {
             $campos = [
                 'dirigido'  => $request['dirigido'], 
-                'nombre'    => $request['nombre'], 
-                'cedula'    => $request['cedula'], 
-                'tiempo'    => $request['tiempo'], 
-                'telefono'  => $request['telefono'], 
+                'personal'  => $request['personal'], 
                 'tipo'      => $request['tipo']
             ];
             $constancia->fill($campos);
@@ -125,13 +122,13 @@ class ConstanciasController extends Controller
     {
         if (is_null ($constancia))
             \App::abort(404);
-        $nombreCompleto = $constancia->id;
+        $nombreCompleto = $constancia->nombrePersonal->nombre;
         $id = $constancia->id;
         $constancia->delete();
         if (\Request::ajax()) {
             return Response::json(array (
                 'success' => true,
-                'msg'     => 'Constancia "' . $nombreCompleto .'" eliminada satisfactoriamente',
+                'msg'     => 'Constancia de "' . $nombreCompleto .'" eliminada satisfactoriamente',
                 'id'      => $id
             ));
         } else {

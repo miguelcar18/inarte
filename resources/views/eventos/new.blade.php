@@ -23,6 +23,11 @@
 		<div class="panel-body">
 			{{ Form::open(["method" => "post", "route" =>'eventos.store', "name" => "eventoForm", "id" => "eventoForm", "class" => "form-horizontal"]) }}
 				@include('eventos.form.EventoFormType')
+				@if(isset($listado))
+                @include('eventos.form.ListadoMatriculas', ['listado' => $listado])
+                @else
+                @include('eventos.form.ListadoMatriculas')
+                @endif
 				@include('layouts.botonesFormularios', ['tituloBoton' => "Guardar", 'rutaCancelar' => URL::route('eventos.index'), 'valorData' => 1, 'idBoton' => 'eventoSubmit'])
 			{{ Form::close() }}
 		</div>

@@ -67,19 +67,19 @@
 		<tbody>
 			@foreach($constancias as $constancia)
             <tr>
-                <td class="text-right">{{ number_format($constancia->cedula, 0, '', '.') }}</td>
-				<td>{{ $constancia->nombre }}</td>
+                <td class="text-right">{{ number_format($constancia->nombrePersonal->cedula, 0, '', '.') }}</td>
+				<td>{{ $constancia->nombrePersonal->nombre }}</td>
 				<td>{{ $constancia->tipo }}</td>
                 <td class="hidden-480">
-                    <a href="{{ URL::route('constancias.show', $constancia->id) }}" data-rel="tooltip" title="Mostrar {{ $constancia->cedula }}" objeto="{{ $constancia->cedula }}" style="text-decoration:none;" data-id="{{ $constancia->id }}"> 
+                    <a href="{{ URL::route('constancias.show', $constancia->id) }}" data-rel="tooltip" title="Mostrar {{ $constancia->nombrePersonal->cedula }}" objeto="{{ $constancia->nombrePersonal->cedula }}" style="text-decoration:none;" data-id="{{ $constancia->id }}"> 
                         <span class="btn btn-mini btn-info"> <i class="icon-eye-open bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="{{ URL::route('constancias.edit', $constancia->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $constancia->cedula }}" objeto="{{ $constancia->cedula }}" style="text-decoration:none;" data-id="{{ $constancia->id }}"> 
+                    <a href="{{ URL::route('constancias.edit', $constancia->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $constancia->nombrePersonal->cedula }}" objeto="{{ $constancia->nombrePersonal->cedula }}" style="text-decoration:none;" data-id="{{ $constancia->id }}"> 
                         <span class="btn btn-mini btn-success"> <i class="icon-pencil bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="#" data-id="{{ $constancia->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $constancia->cedula }}" objeto="{{ $constancia->cedula }}"> 
+                    <a href="#" data-id="{{ $constancia->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $constancia->nombrePersonal->cedula }}" objeto="{{ $constancia->nombrePersonal->cedula }}"> 
                         <span class="btn btn-mini btn-danger"> <i class="icon-remove bigger-120"></i> </span> 
                     </a>
                 </td>
