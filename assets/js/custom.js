@@ -5,6 +5,7 @@ $.fn.reset = function () {
 function decision(message, url){
     if(confirm(message)) location.href = url;
 }
+
 function confirmSubmit(form, message) { 
     var agree=confirm(message);
     if (agree) {
@@ -60,8 +61,7 @@ $('.tooltip-error').click(function (e) {
                         class_name: 'gritter-success'
                     });
                 }, 1000);                
-            }
-            else if (result.error) {
+            } else if (result.error) {
                 setTimeout (function () {
                     $.gritter.add({
                         title: 'Error',
@@ -70,13 +70,504 @@ $('.tooltip-error').click(function (e) {
                     });
                 }, 1000);
                 row.show();               
-            } 
-            else{
+            } else {
                 row.show();
             }
         }, 'json');
     };
 });
+
+$('form#disciplinaForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        nombre: {
+            required: true
+        }
+    },
+    messages: {
+        nombre: {
+            required: 'Ingrese un nombre'
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#disciplinaForm")[0]);
+        $.ajax({
+            url:  $("form#disciplinaForm").attr('action'),
+            type: $("form#disciplinaForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#disciplinaSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#disciplinaSubmit").attr('data') == 1)
+                        action = 'agregada';
+                    else if($("button#disciplinaSubmit").attr('data') == 0)
+                        action = 'actualizada';
+                    alertMessage = 'Disciplina '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#disciplinaSubmit").attr('data') == 1){
+                        $('form#disciplinaForm').reset();
+                        $(document).find('div.success').removeClass('success');
+                    }
+                }
+                $("button#disciplinaSubmit").removeClass('disabled');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#matriculaForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        nombre: {
+            required: true
+        },
+        fechaNacimiento: {
+            required: true
+        },
+        disciplina: {
+            required: true
+        }
+    },
+    messages: {
+        nombre: {
+            required: 'Ingrese un nombre'
+        },
+        fechaNacimiento: {
+            required: 'Ingrese fecha de nacimiento'
+        },
+        disciplina: {
+            required: 'Seleccione una disciplina'
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#matriculaForm")[0]);
+        var valid = false;
+        var fecha = $("#fechaNacimiento").val().split("-")
+        var hoy = new Date();
+        var cumpleanos = new Date(fecha[2], fecha[1] - 1, fecha[0]);
+        var ageDifMs = Date.now() - cumpleanos.getTime();
+        var ageDate = new Date(ageDifMs);
+        var edad = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+        if((edad < 18 && $("#cedulaRepresentante").val() == "") || (edad < 18 && $("#representante").val() == "")){
+            $.gritter.add({
+                title: 'Información',
+                text: "Por ser menor de edad, ingrese los datos del representante",
+                class_name: 'gritter-error'
+            });
+        }
+        else if((edad > 12 && $("#cedula").val() == "")){
+            $.gritter.add({
+                title: 'Información',
+                text: "Ingrese el número de cédula",
+                class_name: 'gritter-error'
+            });
+        } else {
+            $.ajax({
+                url:  $("form#matriculaForm").attr('action'),
+                type: $("form#matriculaForm").attr('method'),
+                headers: {'X-CSRF-TOKEN' : token},
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend:function(){
+                    $("button#matriculaSubmit").addClass('disabled');
+                    $("button#cancelar").addClass('disabled');
+                },
+                success:function(response){
+                    var accion = '';
+                    var alertMessage = '';
+                    var count = 0;
+
+                    if(response.validations == false){
+                        $.each(response.errors, function(index, value){
+                            count++;
+                            alertMessage+= count+". "+value+"<br>";
+                        });
+                        $.gritter.add({
+                            title: 'Información',
+                            text: alertMessage,
+                            class_name: 'gritter-error'
+                        });
+                    }
+                    else if(response.validations == true){
+                        if($("button#matriculaSubmit").attr('data') == 1)
+                            action = 'agregada';
+                        else if($("button#matriculaSubmit").attr('data') == 0)
+                            action = 'actualizada';
+                        alertMessage = 'Matricula '+action+' satisfactoriamente';
+                        $.gritter.add({
+                            title: 'Registrado',
+                            text: alertMessage,
+                            class_name: 'gritter-success'
+                        });
+                        if($("button#matriculaSubmit").attr('data') == 1){
+                            $('form#matriculaForm').reset();
+                            $(document).find('div.success').removeClass('success');
+                        }
+                    }
+                    $("button#matriculaSubmit").removeClass('disabled');
+                    $("button#cancelar").removeClass('disabled');
+                }
+            })
+        }
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#personalForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        cargo: {
+            required: true
+        },
+        edad: {
+            required: true,
+            number: true
+        },
+        nombre: {
+            required: true
+        },
+        cedula: {
+            required: true,
+            number: true
+        },
+        fechaIngreso: {
+            required: true
+        },
+        telefono: {
+            required: true,
+            number: true
+        },
+        tipo: {
+            required: true
+        }
+    },
+    messages: {
+        cargo: {
+            required: "Ingrese un cargo"
+        },
+        edad: {
+            required: "Ingrese la edad", 
+            number: "Ingrese solo números"
+        },
+        nombre: {
+            required: "Ingrese un nombre"
+        },
+        cedula: {
+            required: "Ingrese la cédula", 
+            number: "Ingrese solo números"
+        },
+        fechaIngreso: {
+            required: "Ingrese la fecha de ingreso"
+        },
+        telefono: {
+            required: "Ingrese el número de teléfono", 
+            number: "Ingrese solo números"
+        },
+        tipo: {
+            required: "Seleccione el tipo de personal"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#personalForm")[0]);
+        $.ajax({
+            url:  $("form#personalForm").attr('action'),
+            type: $("form#personalForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#personalSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#personalSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#personalSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Personal '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#personalSubmit").attr('data') == 1){
+                        $('form#personalForm').reset();
+                        $(document).find('div.success').removeClass('success');
+                    }
+                }
+                $("button#personalSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$('form#mensualidadForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        mes: {
+            required: true
+        }, 
+        anio: {
+            required: true, 
+            number:true
+        }, 
+        banco: {
+            required: true
+        }, 
+        comprobante: {
+            required: true, 
+            number:true
+        }, 
+        matricula: {
+            required: true
+        }
+    },
+    messages: {
+        mes: {
+            required: 'Seleccione un mes'
+        }, 
+        anio: {
+            required: 'Ingrese un año', 
+            number: 'Ingrese solo números'
+        }, 
+        banco: {
+            required: 'Seleccione un banco'
+        }, 
+        comprobante: {
+            required: 'Ingrese un número de comprobante', 
+            number: 'Ingrese solo números'
+        }, 
+        matricula: {
+            required: 'Seleccione un participante'
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#mensualidadForm")[0]);
+        $.ajax({
+            url:  $("form#mensualidadForm").attr('action'),
+            type: $("form#mensualidadForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#mensualidadSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#mensualidadSubmit").attr('data') == 1)
+                        action = 'agregada';
+                    else if($("button#mensualidadSubmit").attr('data') == 0)
+                        action = 'actualizada';
+                    alertMessage = 'Mensualidad '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#mensualidadSubmit").attr('data') == 1){
+                        $('form#mensualidadForm').reset();
+                        $(document).find('div.success').removeClass('success');
+                    }
+                }
+                $("button#mensualidadSubmit").removeClass('disabled');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+
+
 
 $("#usuarioForm").validate({
     ignore: 'input[type=hidden], .select2-search__field', 
@@ -214,7 +705,7 @@ $("#usuarioForm").validate({
                     });
                     if($("button#usuarioSubmit").attr('data') == 1){
                         $('form#usuarioForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                     else if($("button#usuarioSubmit").attr('data') == 0){
                         var imagenActual = $('#fotoActual').attr("src").split("/uploads/");
@@ -309,109 +800,6 @@ $("#formLogin").validate({
             }
         })
         return false;
-    }
-});
-
-$('form#mensualidadForm').validate({
-    errorElement: 'span',
-    errorClass: 'help-inline',
-    focusInvalid: false,
-    rules: {
-        password_actual: {
-            required: true
-        },
-        password: {
-            required: true,
-            minlength: 6
-        },
-        password_confirmation: {
-            required: true,
-            equalTo: "#password"
-        }
-    },
-    messages: {
-        password_actual: {
-            required: 'Ingrese su contraseña actual'
-        },
-        password: {
-            required: "Ingrese su nueva contraseña",
-            minlength: jQuery.validator.format("Debe ingresar al menos {0} caracteres")
-        },
-        password_confirmation: {
-            required: 'Repita la nueva contraseña',
-            equalTo: 'Las contraseñas deben de ser iguales'
-        }
-    },
-    invalidHandler: function (event, validator) { //display error alert on form submit   
-        $('.alert-error', $('.login-form')).show();
-    },
-
-    highlight: function (e) {
-        $(e).closest('.control-group').removeClass('info').addClass('error');
-    },
-
-    success: function (e) {
-        $(e).closest('.control-group').removeClass('error').addClass('success');
-        $(e).remove();
-    },
-    errorPlacement: function (error, element) {
-        if(element.is(':checkbox') || element.is(':radio')) {
-            var controls = element.closest('.controls');
-            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-        }
-        else if(element.is('.select2')) {
-            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-        }
-        else if(element.is('.chzn-select')) {
-            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
-        }
-        else error.insertAfter(element);
-    },
-    submitHandler: function (form) {
-        var token = $("input[name=_token]").val();
-        var formData = new FormData($("form#passwordForm")[0]);
-        $.ajax({
-            url:  $("form#passwordForm").attr('action'),
-            type: $("form#passwordForm").attr('method'),
-            headers: {'X-CSRF-TOKEN' : token},
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend:function(){
-                $("button#passwordSubmit").addClass('disabled');
-                $("button#cancelar").addClass('disabled');
-            },
-            success:function(response){
-                var accion = '';
-                var alertMessage = '';
-                var count = 0;
-
-                if(response.message == "error"){
-                    $.gritter.add({
-                        title: 'Información',
-                        text: 'La contraseña acutal ingresada es incorrecta.',
-                        class_name: 'gritter-error'
-                    });
-                }
-                else if(response.message == "correcto"){
-                    action = 'actualizada';
-                    alertMessage = 'Contraseña '+action+' satisfactoriamente';
-                    $.gritter.add({
-                        title: 'Información',
-                        text: 'La contraseña acutal ingresada es incorrecta.',
-                        class_name: 'gritter-success'
-                    });
-                    $('form#passwordForm').reset();
-                    $(document).find('.validation-valid-label').remove();
-                }
-                $("button#passwordSubmit").removeClass('disabled');
-                $("button#cancelar").removeClass('disabled');
-            }
-        })
-        return false;
-    },
-    invalidHandler: function (form) {
     }
 });
 
@@ -531,137 +919,10 @@ $('form#constanciaForm').validate({
                     });
                     if($("button#constanciaSubmit").attr('data') == 1){
                         $('form#constanciaForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                 }
                 $("button#constanciaSubmit").button('reset');
-                $("button#cancelar").removeClass('disabled');
-            }
-        })
-        return false;
-    },
-    invalidHandler: function (form) {
-    }
-});
-
-$('form#personalForm').validate({
-    errorElement: 'span',
-    errorClass: 'help-inline',
-    focusInvalid: false,
-    rules: {
-        cargo: {
-            required: true
-        },
-        nombre: {
-            required: true
-        },
-        edad: {
-            required: true
-        },
-        tiempo: {
-            required: true
-        },
-        telefono: {
-            required: true
-        },
-        tipo: {
-            required: true
-        }
-    },
-    messages: {
-        cargo: {
-            required: "Ingrese un cargo"
-        },
-        nombre: {
-            required: "Ingrese un nombre"
-        },
-        edad: {
-            required: "Ingrese la edad"
-        },
-        tiempo: {
-            required: "Ingrese el tiempo que tiene en la empresa"
-        },
-        telefono: {
-            required: "Ingrese el número de teléfono"
-        },
-        tipo: {
-            required: "Seleccione el tipo de personal"
-        }
-    },
-    invalidHandler: function (event, validator) { //display error alert on form submit   
-        $('.alert-error', $('.login-form')).show();
-    },
-
-    highlight: function (e) {
-        $(e).closest('.control-group').removeClass('info').addClass('error');
-    },
-
-    success: function (e) {
-        $(e).closest('.control-group').removeClass('error').addClass('success');
-        $(e).remove();
-    },
-    errorPlacement: function (error, element) {
-        if(element.is(':checkbox') || element.is(':radio')) {
-            var controls = element.closest('.controls');
-            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-        }
-        else if(element.is('.select2')) {
-            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-        }
-        else if(element.is('.chzn-select')) {
-            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
-        }
-        else error.insertAfter(element);
-    },
-    submitHandler: function (form) {
-        var token = $("input[name=_token]").val();
-        var formData = new FormData($("form#personalForm")[0]);
-        $.ajax({
-            url:  $("form#personalForm").attr('action'),
-            type: $("form#personalForm").attr('method'),
-            headers: {'X-CSRF-TOKEN' : token},
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend:function(){
-                $("button#personalSubmit").addClass('disabled');
-                $("button#cancelar").addClass('disabled');
-            },
-            success:function(response){
-                var accion = '';
-                var alertMessage = '';
-                var count = 0;
-
-                if(response.validations == false){
-                    //alertMessage = "<b>Campos únicos:</b> <br>";
-                    $.each(response.errors, function(index, value){
-                        count++;
-                        alertMessage+= count+". "+value+"<br>";
-                    });
-                    $.gritter.add({
-                        title: 'Información',
-                        text: alertMessage,
-                        class_name: 'gritter-error'
-                    });
-                }
-                else if(response.validations == true){
-                    if($("button#personalSubmit").attr('data') == 1)
-                        action = 'agregado';
-                    else if($("button#personalSubmit").attr('data') == 0)
-                        action = 'actualizado';
-                    alertMessage = 'Personal '+action+' satisfactoriamente';
-                    $.gritter.add({
-                        title: 'Registrado',
-                        text: alertMessage,
-                        class_name: 'gritter-success'
-                    });
-                    if($("button#personalSubmit").attr('data') == 1){
-                        $('form#personalForm').reset();
-                        $(document).find('.validation-valid-label').remove();
-                    }
-                }
-                $("button#personalSubmit").button('reset');
                 $("button#cancelar").removeClass('disabled');
             }
         })
@@ -767,7 +1028,7 @@ $('form#eventoForm').validate({
                     });
                     if($("button#eventoSubmit").attr('data') == 1){
                         $('form#eventoForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                 }
                 $("button#eventoSubmit").button('reset');
@@ -882,7 +1143,7 @@ $('form#cursoForm').validate({
                     });
                     if($("button#cursoSubmit").attr('data') == 1){
                         $('form#cursoForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                 }
                 $("button#cursoSubmit").button('reset');
@@ -985,7 +1246,7 @@ $('form#horarioForm').validate({
                     });
                     if($("button#horarioSubmit").attr('data') == 1){
                         $('form#horarioForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                 }
                 $("button#horarioSubmit").button('reset');
@@ -1088,7 +1349,7 @@ $('form#sugerenciaForm').validate({
                     });
                     if($("button#sugerenciaSubmit").attr('data') == 1){
                         $('form#sugerenciaForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                 }
                 $("button#sugerenciaSubmit").button('reset');
@@ -1205,7 +1466,7 @@ $('form#alumnoForm').validate({
                     });
                     if($("button#alumnoSubmit").attr('data') == 1){
                         $('form#alumnoForm').reset();
-                        $(document).find('.validation-valid-label').remove();
+                        $(document).find('div.success').removeClass('success');
                     }
                 }
                 $("button#alumnoSubmit").button('reset');

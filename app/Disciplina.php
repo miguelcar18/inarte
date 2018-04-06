@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sugerencia extends Model
+class Disciplina extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'sugerencias';
+    protected $table = 'disciplinas';
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +19,6 @@ class Sugerencia extends Model
      * @var array
      */
     protected $fillable = [
-        'sugerencia', 'nombre'
+        'nombre', 'descripcion'
     ];
 }

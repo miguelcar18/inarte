@@ -11,18 +11,20 @@
 
     <table id="sample-table-1" class="table table-striped table-bordered table-hover">
         <tbody>
+            @if($mensualidad->nombreMatricula->cedula != "")
             <tr>
                 <th width="25%">Cédula</th>
-                <td>{{ number_format($mensualidad->cedula, 0, '', '.') }}</td>
+                <td>{{ number_format($mensualidad->nombreMatricula->cedula, 0, '', '.') }}</td>
             </tr>
+            @endif
             <tr>
                 <th>Nombre y apellido</th>
-                <td>{{ $mensualidad->nombre }}</td>
+                <td>{{ $mensualidad->nombreMatricula->nombre }}</td>
             </tr>
-            @if($mensualidad->representante != "")
+            @if($mensualidad->nombreMatricula->representante != "")
             <tr>
                 <th>Nombre del representante</th>
-                <td>{{ $mensualidad->representante }}</td>
+                <td>{{ $mensualidad->nombreMatricula->representante }}</td>
             </tr>
 			@endif
             <tr>
@@ -36,6 +38,10 @@
             <tr>
                 <th>Mes</th>
                 <td>{{ $mensualidad->mes }}</td>
+            </tr>
+            <tr>
+                <th>Año</th>
+                <td>{{ $mensualidad->anio }}</td>
             </tr>
             <tr>
 				<td class="col-md-3 col-sm-4"><b>Acciones</b></td>

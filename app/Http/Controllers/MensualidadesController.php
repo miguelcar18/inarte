@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mensualidad;
+use App\Matricula;
 use Illuminate\Http\Request;
 use App\Http\Requests\MensualidadesRequest;
 use Session;
@@ -38,7 +39,8 @@ class MensualidadesController extends Controller
      */
     public function create()
     {
-        return view('mensualidades.new');
+        $matriculas = array('' => "Seleccione") + Matricula::orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
+        return view('mensualidades.new', compact('matriculas'));
     }
 
     /**
@@ -50,13 +52,12 @@ class MensualidadesController extends Controller
     public function store(MensualidadesRequest $request)
     {
         if($request->ajax()){
-            $campos = [
-                'cedula'        => $request['cedula'], 
-                'nombre'        => $request['nombre'], 
-                'representante' => $request['representante'], 
+            $campos = [ 
                 'banco'         => $request['banco'], 
                 'comprobante'   => $request['comprobante'], 
-                'mes'           => $request['mes']
+                'mes'           => $request['mes'], 
+                'anio'          => $request['anio'], 
+                'matricula'     => $request['matricula']
             ];
             Mensualidad::create($campos);
             return response()->json([
@@ -86,7 +87,8 @@ class MensualidadesController extends Controller
     public function edit(Mensualidad $mensualidad, $id)
     {
         $mensualidad = Mensualidad::find($id);
-        return view('mensualidades.edit', ['mensualidad' => $mensualidad]);
+        $matriculas = array('' => "Seleccione") + Matricula::orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
+        return view('mensualidades.edit', ['mensualidad' => $mensualidad, 'matriculas' => $matriculas]);
     }
 
     /**
@@ -101,13 +103,12 @@ class MensualidadesController extends Controller
         $mensualidad = Mensualidad::find($id);
         if($request->ajax())
         {
-            $campos = [
-                'cedula'        => $request['cedula'], 
-                'nombre'        => $request['nombre'], 
-                'representante' => $request['representante'], 
+            $campos = [ 
                 'banco'         => $request['banco'], 
                 'comprobante'   => $request['comprobante'], 
-                'mes'           => $request['mes']
+                'mes'           => $request['mes'], 
+                'anio'          => $request['anio'], 
+                'matricula'     => $request['matricula']
             ];
             $mensualidad->fill($campos);
             $mensualidad->save();
@@ -129,17 +130,17 @@ class MensualidadesController extends Controller
         $mensualidad = Mensualidad::find($id);
         if (is_null ($mensualidad))
             \App::abort(404);
-        $nombreCompleto = $mensualidad->nombre.' del mes de '.$mensualidad->mes;
+        $nombreCompleto = 'de '.$mensualidad->nombreMatricula->nombre.' del mes de '.$mensualidad->mes.' y del año '.$mensualidad->anio;
         $id = $mensualidad->id;
         $mensualidad->delete();
         if (\Request::ajax()) {
             return Response::json(array (
                 'success' => true,
-                'msg'     => 'Mensualidad "' . $nombreCompleto .'" eliminada satisfactoriamente',
+                'msg'     => 'Mensualidad ' . $nombreCompleto .' eliminada satisfactoriamente',
                 'id'      => $id
             ));
         } else {
-            $mensaje = 'Mensualidad "'. $nombreCompleto .'" eliminada satisfactoriamente';
+            $mensaje = 'Mensualidad '. $nombreCompleto .' eliminada satisfactoriamente';
             Session::flash('message', $mensaje);
             return Redirect::route('mensualidades.index');
         }

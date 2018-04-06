@@ -1,24 +1,8 @@
 <div class="control-group">
-	<label class="control-label" for="cedula">Cédula: <small class="text-error">*</small></label>
+	<label class="control-label" for="matricula">Participante: <small class="text-error">*</small></label>
 	<div class="controls">
 		<div class="span12">
-			{{ Form::text("cedula", null, ["class" => "span6", "placeholder" => "Número de cédula", "id" => "cedula", 'required' => true]) }}
-		</div>
-	</div>
-</div>
-<div class="control-group">
-	<label class="control-label" for="nombre">Nombre y apellido: <small class="text-error">*</small></label>
-	<div class="controls">
-		<div class="span12">
-			{{ Form::text("nombre", null, ["class" => "span6", "placeholder" => "Nombre y apellido", "id" => "nombre", 'required' => true]) }}
-		</div>
-	</div>
-</div>
-<div class="control-group">
-	<label class="control-label" for="representante">Nombre del representante:</label>
-	<div class="controls">
-		<div class="span12">
-			{{ Form::text("representante", null, ["class" => "span6", "placeholder" => "Nombre del representante", "id" => "representante"]) }}
+			{!! Form::select('matricula', $matriculas, null, ['id' => 'matricula', 'class' => 'span6', 'required' => true]) !!}
 		</div>
 	</div>
 </div>
@@ -27,6 +11,14 @@
 	<div class="controls">
 		<div class="span12">
 			{!! Form::select('mes', ["" => "Seleccione una opción", "Enero" => "Enero", "Febrero" => "Febrero", "Marzo" => "Marzo", "Abril" => "Abril", "Mayo" => "Mayo", "Junio" => "Junio", "Julio" => "Julio", "Agosto" => "Agosto", "Septiembre" => "Septiembre", "Octubre" => "Octubre", "Noviembre" => "Noviembre", "Diciembre" => "Diciembre"], null, ['id' => 'mes', 'class' => 'span6', 'required' => true]) !!}
+		</div>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="anio">Año: <small class="text-error">*</small></label>
+	<div class="controls">
+		<div class="span12">
+			{{ Form::text("anio", null, ["class" => "span6", "placeholder" => "Año", "id" => "anio", 'required' => true]) }}
 		</div>
 	</div>
 </div>

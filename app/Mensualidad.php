@@ -19,15 +19,10 @@ class Mensualidad extends Model
      * @var array
      */
     protected $fillable = [
-        'cedula', 'nombre', 'representante', 'banco', 'comprobante', 'mes'
+        'banco', 'comprobante', 'mes', 'anio', 'matricula'
     ];
 
-    /**
-    * Obtener la cédula, el nombre y el apellido
-    *
-    * @return string
-    */
-    public function getCedulaNombreAttribute(){
-        return number_format($this->cedula, 0, '', '.') . ' - ' . $this->nombre;
+    public function nombreMatricula(){
+        return $this->hasOne('App\Matricula', 'id', 'matricula');
     }
 }

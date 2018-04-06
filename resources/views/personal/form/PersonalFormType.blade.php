@@ -31,10 +31,26 @@
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label" for="tiempo">Tiempo en la empresa: <small class="text-error">*</small></label>
+	<label class="control-label" for="cedula">Cédula: <small class="text-error">*</small></label>
 	<div class="controls">
 		<div class="span12">
-			{{ Form::text("tiempo", null, ["class" => "span6", "placeholder" => "Tiempo en la empresa", "id" => "tiempo"]) }}
+			{{ Form::text("cedula", null, ["class" => "span6", "placeholder" => "Cédula", "id" => "cedula", 'required' => true]) }}
+		</div>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="fechaIngreso">Fecha de ingreso: <small class="text-error">*</small></label>
+	<div class="controls">
+		<div class="span12">
+			@if(isset($personal->fechaIngreso))
+			<?php 
+				$separarFecha =  explode('-', $personal->fechaIngreso);
+				$fechaNormal =  $separarFecha[2].'-'.$separarFecha[1].'-'.$separarFecha[0];
+			?>
+			{!! Form::text('fechaIngreso',  $fechaNormal, ['id' => 'fechaIngreso', 'class' => 'span6 date-picker', 'placeholder' => 'Fecha de ingreso', 'data-date-format' => "dd-mm-yyyy"]) !!}
+			@else
+			{!! Form::text('fechaIngreso', null, ['id' => 'fechaIngreso', 'class' => 'span6 date-picker', 'placeholder' => 'Fecha de ingreso', 'data-date-format' => "dd-mm-yyyy"]) !!}
+			@endif
 		</div>
 	</div>
 </div>
@@ -58,7 +74,7 @@
 	<label class="control-label" for="eventos">Eventos participados:</label>
 	<div class="controls">
 		<div class="span12">
-			{{ Form::textarea("eventos", null, ["class" => "span6", "placeholder" => "", "id" => "eventos"]) }}
+			{{ Form::textarea("eventos", null, ["class" => "span6", "placeholder" => "", "id" => "eventos", "rows" => 4]) }}
 		</div>
 	</div>
 </div>

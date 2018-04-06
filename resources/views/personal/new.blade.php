@@ -11,6 +11,10 @@
 @section('javascripts')
 	<script type="text/javascript">
 		$(function() {
+			$('.date-picker').datepicker().next().on(ace.click_event, function(){
+				$(this).prev().focus();
+			});
+			
 			$('#file').ace_file_input({
 				style:'well',
 				btn_choose:'Arrastre la imagen o haga click para elegir',

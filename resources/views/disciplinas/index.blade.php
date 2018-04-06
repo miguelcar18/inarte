@@ -1,11 +1,11 @@
 @extends('layouts.base')
 
 @section('titulo')
-<title>Personal - Inarte</title>
+<title>Disciplinas - Inarte</title>
 @stop
 
 @section('cabecera')
-@include('layouts.breadcrumb', ['titulo' => "Personal", 'tituloModulo' => "Personal"])
+@include('layouts.breadcrumb', ['titulo' => "Disciplinas", 'tituloModulo' => "Disciplinas"])
 @stop
 
 @section('javascripts')
@@ -15,9 +15,10 @@
 		$(function() {
 			var oTable1 = $('#sample-table-2').dataTable({
 				"aoColumns": [
-					null, null,null, null,
+					null, null,null,
 					{ "bSortable": false }
 				], 
+				"aaSorting": [[1, 'asc']],
 				"oLanguage": {
 					"sLengthMenu": "Mostrar _MENU_ ",
 					"sZeroRecords": "No existen datos para esta consulta",
@@ -54,34 +55,32 @@
 @section('contenido')
 
 <div class="row-fluid">
-	<h3 class="header smaller lighter blue">Listado de personal</h3>
+	<h3 class="header smaller lighter blue">Listado de disciplinas</h3>
 	<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<th>Cédula</th>
-                <th>Nombre y apellido</th>
-                <th>Teléfono</th>
-                <th>Tipo de personal</th>
+				<th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
                 <th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($personal as $data)
+			@foreach($disciplinas as $disciplina)
             <tr>
-            	<td>{{ number_format($data->cedula, 0, '', '.') }}</td>
-				<td>{{ $data->nombre }}</td>
-				<td>{{ $data->telefono }}</td>
-				<td>{{ $data->tipo }}</td>
+                <td>{{ $disciplina->id }}</td>
+				<td>{{ $disciplina->nombre }}</td>
+				<td>{{ $disciplina->descripcion }}</td>
                 <td class="hidden-480">
-                    <a href="{{ URL::route('personal.show', $data->id) }}" data-rel="tooltip" title="Mostrar {{ $data->cedula }}" objeto="{{ $data->cedula }}" style="text-decoration:none;" data-id="{{ $data->id }}"> 
+                    <a href="{{ URL::route('disciplinas.show', $disciplina->id) }}" data-rel="tooltip" title="Mostrar {{ $disciplina->cedula }}" objeto="{{ $disciplina->cedula }}" style="text-decoration:none;" data-id="{{ $disciplina->id }}"> 
                         <span class="btn btn-mini btn-info"> <i class="icon-eye-open bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="{{ URL::route('personal.edit', $data->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $data->cedula }}" objeto="{{ $data->cedula }}" style="text-decoration:none;" data-id="{{ $data->id }}"> 
+                    <a href="{{ URL::route('disciplinas.edit', $disciplina->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $disciplina->cedula }}" objeto="{{ $disciplina->cedula }}" style="text-decoration:none;" data-id="{{ $disciplina->id }}"> 
                         <span class="btn btn-mini btn-success"> <i class="icon-pencil bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="#" data-id="{{ $data->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $data->cedula }}" objeto="{{ $data->cedula }}"> 
+                    <a href="#" data-id="{{ $disciplina->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $disciplina->cedula }}" objeto="{{ $disciplina->cedula }}"> 
                         <span class="btn btn-mini btn-danger"> <i class="icon-remove bigger-120"></i> </span> 
                     </a>
                 </td>
@@ -89,7 +88,7 @@
         @endforeach
 		</tbody>
 	</table>
-	{!! Form::open(array('route' => array('personal.destroy', 'USER_ID'), 'method' => 'DELETE', 'role' => 'form', 'id' => 'form-delete')) !!}
+	{!! Form::open(array('route' => array('disciplinas.destroy', 'USER_ID'), 'method' => 'DELETE', 'role' => 'form', 'id' => 'form-delete')) !!}
         {!! Form::close() !!}
 </div>
 

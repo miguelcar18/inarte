@@ -50,8 +50,12 @@ class PersonalController extends Controller
     public function store(Request $request)
     {
         if($request->ajax()){
+            $separarFecha = explode('-', $request['fechaIngreso']);
+            $fechaSql     = $separarFecha[2].'-'.$separarFecha[1].'-'.$separarFecha[0];
             if(!empty($request->file('foto'))) {
                 $file = $request->file('foto');
+                $nombre = str_replace(':', '_', Carbon::now()->toDateTimeString().$file->getClientOriginalName());
+                $nombre = str_replace(' ', '_', $nombre);
                 $nombre = Carbon::now()->toDateTimeString().$file->getClientOriginalName();
                 \Storage::disk('personals')->put($nombre,  \File::get($file));
             }
@@ -59,14 +63,15 @@ class PersonalController extends Controller
                 $nombre = '';
             }
             $campos = [
-                'foto'      => $nombre, 
-                'nombre'    => $request['nombre'], 
-                'cargo'     => $request['cargo'], 
-                'edad'      => $request['edad'], 
-                'eventos'   => $request['eventos'], 
-                'tiempo'    => $request['tiempo'], 
-                'telefono'  => $request['telefono'], 
-                'tipo'      => $request['tipo']
+                'foto'          => $nombre, 
+                'cargo'         => $request['cargo'], 
+                'edad'          => $request['edad'], 
+                'nombre'        => $request['nombre'], 
+                'cedula'        => $request['cedula'], 
+                'fechaIngreso'  => $fechaSql, 
+                'telefono'      => $request['telefono'], 
+                'tipo'          => $request['tipo'], 
+                'eventos'       => $request['eventos'], 
             ];
             Personal::create($campos);
             return response()->json([
@@ -107,9 +112,13 @@ class PersonalController extends Controller
     public function update(PersonalRequest $request, Personal $personal)
     {
         if($request->ajax()){
+            $separarFecha = explode('-', $request['fechaIngreso']);
+            $fechaSql     = $separarFecha[2].'-'.$separarFecha[1].'-'.$separarFecha[0];
             if(!empty($request->file('foto')) and $request->file('foto') != ''){
                 \File::delete('uploads/personal/'.$personal->foto);
                 $file = $request->file('foto');
+                $nombre = str_replace(':', '_', Carbon::now()->toDateTimeString().$file->getClientOriginalName());
+                $nombre = str_replace(' ', '_', $nombre);
                 $nombre = Carbon::now()->toDateTimeString().$file->getClientOriginalName();
                 \Storage::disk('personals')->put($nombre,  \File::get($file));
             }   
@@ -118,13 +127,15 @@ class PersonalController extends Controller
             }
 
             $campos = [
-                'foto'      => $nombre, 
-                'nombre'    => $request['nombre'], 
-                'cargo'     => $request['cargo'], 
-                'edad'      => $request['edad'], 
-                'eventos'   => $request['eventos'], 
-                'tiempo'    => $request['tiempo'], 
-                'telefono'  => $request['telefono']
+                'foto'          => $nombre, 
+                'cargo'         => $request['cargo'], 
+                'edad'          => $request['edad'], 
+                'nombre'        => $request['nombre'], 
+                'cedula'        => $request['cedula'], 
+                'fechaIngreso'  => $fechaSql, 
+                'telefono'      => $request['telefono'], 
+                'tipo'          => $request['tipo'], 
+                'eventos'       => $request['eventos'], 
             ];
             $personal->fill($campos);
             $personal->save();
@@ -143,7 +154,6 @@ class PersonalController extends Controller
      */
     public function destroy(Personal $personal)
     {
-
         if (is_null ($personal))
             \App::abort(404);
         $nombreCompleto = $personal->nombre;
@@ -159,7 +169,7 @@ class PersonalController extends Controller
         } else {
             $mensaje = 'Personal "'. $nombreCompleto .'" eliminado satisfactoriamente';
             Session::flash('message', $mensaje);
-            return Redirect::route('personals.index');
+            return Redirect::route('personal.index');
         }
     }
 }

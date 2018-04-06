@@ -29,18 +29,18 @@ class MensualidadesRequest extends FormRequest
             case 'DELETE': { return []; }
             case 'POST': {
                 return [
-                    'cedula'        => 'required', 
-                    'nombre'        => 'required', 
+                    'matricula'     => 'required', 
                     'mes'           => 'required', 
+                    'anio'          => 'required|integer', 
                     'banco'         => 'required',
                     'comprobante'   => 'required|unique:mensualidades'
                 ];
             }
             case 'PUT': {
                 return [
-                    'cedula'        => 'required', 
-                    'nombre'        => 'required', 
+                    'matricula'     => 'required', 
                     'mes'           => 'required', 
+                    'anio'          => 'required|integer', 
                     'banco'         => 'required',
                     'comprobante'   => 'required|unique:mensualidades'
                 ];
@@ -52,22 +52,23 @@ class MensualidadesRequest extends FormRequest
 
     public function messages(){
         return [
-            'cedula.required'       => 'El campo :attribute es obligatorio.', 
-            'nombre.required'       => 'El campo :attribute es obligatorio.',
+            'matricula.required'    => 'El campo :attribute es obligatorio.',
             'mes.required'          => 'El campo :attribute es obligatorio.', 
+            'anio.required'         => 'El campo :attribute es obligatorio.', 
             'banco.required'        => 'El campo :attribute es obligatorio.', 
             'comprobante.required'  => 'El campo :attribute es obligatorio.', 
             'comprobante.unique'    => 'El :attribute ingresado ya ha sido registrado.', 
+            'anio.integer'          => 'El campo :attribute solo debe contener números.', 
         ];
     }
 
     public function attributes(){
         return [
-            'cedula'        => 'cédula', 
-            'nombre'        => 'nombre y apellido',
             'mes'           => 'mes',
+            'anio'          => 'año',
             'banco'         => 'banco', 
-            'comprobante'   => 'comprobante'
+            'comprobante'   => 'comprobante', 
+            'participante'  => 'participante'
         ];
     }
 

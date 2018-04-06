@@ -6,6 +6,78 @@
 				<span class="menu-text"> Inicio </span>
 			</a>
 		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'disciplinas.index' or Route::getCurrentRoute()->getName() == 'disciplinas.show' or Route::getCurrentRoute()->getName() == 'disciplinas.edit' or Route::getCurrentRoute()->getName() == 'disciplinas.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-star"></i>
+				<span class="menu-text"> Disciplinas</span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'disciplinas.index' or 
+					Route::getCurrentRoute()->getName() == 'disciplinas.show' or 
+					Route::getCurrentRoute()->getName() == 'disciplinas.edit') class="active" @endif>
+					<a href="{{ URL::route('disciplinas.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'disciplinas.create') class="active" @endif>
+					<a href="{{ URL::route('disciplinas.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'matriculas.index' or Route::getCurrentRoute()->getName() == 'matriculas.show' or Route::getCurrentRoute()->getName() == 'matriculas.edit' or Route::getCurrentRoute()->getName() == 'matriculas.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-maxcdn"></i>
+				<span class="menu-text"> Matricula</span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'matriculas.index' or 
+					Route::getCurrentRoute()->getName() == 'matriculas.show' or 
+					Route::getCurrentRoute()->getName() == 'matriculas.edit') class="active" @endif>
+					<a href="{{ URL::route('matriculas.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'matriculas.create') class="active" @endif>
+					<a href="{{ URL::route('matriculas.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+
+
+
+		<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or Route::getCurrentRoute()->getName() == 'personal.show' or Route::getCurrentRoute()->getName() == 'personal.edit' or Route::getCurrentRoute()->getName() == 'personal.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-briefcase"></i>
+				<span class="menu-text"> Personal </span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or 
+					Route::getCurrentRoute()->getName() == 'personal.show' or 
+					Route::getCurrentRoute()->getName() == 'personal.edit') class="active" @endif>
+					<a href="{{ URL::route('personal.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'personal.create') class="active" @endif>
+					<a href="{{ URL::route('personal.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
 		<li @if(Route::getCurrentRoute()->getName() == 'mensualidades.index' or Route::getCurrentRoute()->getName() == 'mensualidades.show' or Route::getCurrentRoute()->getName() == 'mensualidades.edit' or Route::getCurrentRoute()->getName() == 'mensualidades.create') class="active open" @endif>
 			<a href="#" class="dropdown-toggle">
 				<i class="icon-calendar"></i>
@@ -46,29 +118,6 @@
 				</li>
 				<li @if(Route::getCurrentRoute()->getName() == 'constancias.create') class="active" @endif>
 					<a href="{{ URL::route('constancias.create') }}">
-						<i class="icon-double-angle-right"></i>
-						Agregar
-					</a>
-				</li>
-			</ul>
-		</li>
-		<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or Route::getCurrentRoute()->getName() == 'personal.show' or Route::getCurrentRoute()->getName() == 'personal.edit' or Route::getCurrentRoute()->getName() == 'personal.create') class="active open" @endif>
-			<a href="#" class="dropdown-toggle">
-				<i class="icon-briefcase"></i>
-				<span class="menu-text"> Personal </span>
-				<b class="arrow icon-angle-down"></b>
-			</a>
-			<ul class="submenu">
-				<li @if(Route::getCurrentRoute()->getName() == 'personal.index' or 
-					Route::getCurrentRoute()->getName() == 'personal.show' or 
-					Route::getCurrentRoute()->getName() == 'personal.edit') class="active" @endif>
-					<a href="{{ URL::route('personal.index') }}">
-						<i class="icon-double-angle-right"></i>
-						Listado
-					</a>
-				</li>
-				<li @if(Route::getCurrentRoute()->getName() == 'personal.create') class="active" @endif>
-					<a href="{{ URL::route('personal.create') }}">
 						<i class="icon-double-angle-right"></i>
 						Agregar
 					</a>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AlumnosRequest extends FormRequest
+class DisciplinasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,26 +21,18 @@ class AlumnosRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
-        switch($this->method())
-        {
+    public function rules(){
+        switch($this->method()){
             case 'GET':
             case 'DELETE': { return []; }
             case 'POST': {
                 return [
-                    'edad'          => 'required', 
-                    'nombre'        => 'required', 
-                    'banco'         => 'required',
-                    'comprobante'   => 'required|unique:alumnos'
+                    'nombre' => 'required|unique:disciplinas'
                 ];
             }
             case 'PUT': {
                 return [
-                    'edad'          => 'required', 
-                    'nombre'        => 'required', 
-                    'banco'         => 'required',
-                    'comprobante'   => 'required|unique:alumnos'
+                    'nombre' => 'required', 
                 ];
             }
             case 'PATCH': { return []; }
@@ -50,20 +42,14 @@ class AlumnosRequest extends FormRequest
 
     public function messages(){
         return [
-            'edad.required'         => 'El campo :attribute es obligatorio.', 
-            'nombre.required'       => 'El campo :attribute es obligatorio.',
-            'banco.required'        => 'El campo :attribute es obligatorio.', 
-            'comprobante.required'  => 'El campo :attribute es obligatorio.', 
-            'comprobante.unique'    => 'El :attribute ingresado ya ha sido registrado.', 
+            'nombre.required'   => 'El campo :attribute es obligatorio.', 
+            'nombre.unique'     => 'El :attribute ingresado ya ha sido registrado.', 
         ];
     }
 
     public function attributes(){
         return [
-            'edad'          => 'edad', 
-            'nombre'        => 'nombre y apellido',
-            'banco'         => 'banco', 
-            'comprobante'   => 'comprobante'
+            'nombre' => 'nombre'
         ];
     }
 

@@ -19,6 +19,6 @@ class Personal extends Model
      * @var array
      */
     protected $fillable = [
-        'foto', 'cargo', 'edad', 'eventos', 'tiempo', 'telefono', 'tipo', 'nombre'
+        'foto', 'cargo', 'edad', 'nombre', 'cedula', 'fechaIngreso', 'telefono', 'tipo', 'eventos' 
     ];
 }

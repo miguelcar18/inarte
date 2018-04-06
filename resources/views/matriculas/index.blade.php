@@ -1,11 +1,11 @@
 @extends('layouts.base')
 
 @section('titulo')
-<title>Personal - Inarte</title>
+<title>Matriculas - Inarte</title>
 @stop
 
 @section('cabecera')
-@include('layouts.breadcrumb', ['titulo' => "Personal", 'tituloModulo' => "Personal"])
+@include('layouts.breadcrumb', ['titulo' => "Matriculas", 'tituloModulo' => "Matriculas"])
 @stop
 
 @section('javascripts')
@@ -18,6 +18,7 @@
 					null, null,null, null,
 					{ "bSortable": false }
 				], 
+				"aaSorting": [[1, 'asc']],
 				"oLanguage": {
 					"sLengthMenu": "Mostrar _MENU_ ",
 					"sZeroRecords": "No existen datos para esta consulta",
@@ -54,34 +55,52 @@
 @section('contenido')
 
 <div class="row-fluid">
-	<h3 class="header smaller lighter blue">Listado de personal</h3>
+	<h3 class="header smaller lighter blue">Listado de estudiantes matriculados</h3>
 	<table id="sample-table-2" class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
 				<th>Cédula</th>
                 <th>Nombre y apellido</th>
-                <th>Teléfono</th>
-                <th>Tipo de personal</th>
+                <th>Cédula del representante</th>
+                <th>Nombre y apellido del representante</th>
                 <th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($personal as $data)
+			@foreach($matriculas as $matricula)
             <tr>
-            	<td>{{ number_format($data->cedula, 0, '', '.') }}</td>
-				<td>{{ $data->nombre }}</td>
-				<td>{{ $data->telefono }}</td>
-				<td>{{ $data->tipo }}</td>
+                <td>
+                	@if($matricula->cedula != null || $matricula->cedula != "")
+                	{{ number_format($matricula->cedula, 0, '', '.') }}
+                	@else
+                	--
+                	@endif
+                </td>
+				<td>{{ $matricula->nombre }}</td>
+				<td>
+					@if($matricula->cedulaRepresentante != null || $matricula->cedulaRepresentante != "")
+                	{{ number_format($matricula->cedulaRepresentante, 0, '', '.') }}
+                	@else
+                	--
+                	@endif
+				</td>
+				<td>
+					@if($matricula->representante != null || $matricula->representante != "")
+                	{{ $matricula->representante }}
+                	@else
+                	--
+                	@endif
+				</td>
                 <td class="hidden-480">
-                    <a href="{{ URL::route('personal.show', $data->id) }}" data-rel="tooltip" title="Mostrar {{ $data->cedula }}" objeto="{{ $data->cedula }}" style="text-decoration:none;" data-id="{{ $data->id }}"> 
+                    <a href="{{ URL::route('matriculas.show', $matricula->id) }}" data-rel="tooltip" title="Mostrar {{ $matricula->cedula }}" objeto="{{ $matricula->cedula }}" style="text-decoration:none;" data-id="{{ $matricula->id }}"> 
                         <span class="btn btn-mini btn-info"> <i class="icon-eye-open bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="{{ URL::route('personal.edit', $data->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $data->cedula }}" objeto="{{ $data->cedula }}" style="text-decoration:none;" data-id="{{ $data->id }}"> 
+                    <a href="{{ URL::route('matriculas.edit', $matricula->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $matricula->cedula }}" objeto="{{ $matricula->cedula }}" style="text-decoration:none;" data-id="{{ $matricula->id }}"> 
                         <span class="btn btn-mini btn-success"> <i class="icon-pencil bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="#" data-id="{{ $data->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $data->cedula }}" objeto="{{ $data->cedula }}"> 
+                    <a href="#" data-id="{{ $matricula->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $matricula->cedula }}" objeto="{{ $matricula->cedula }}"> 
                         <span class="btn btn-mini btn-danger"> <i class="icon-remove bigger-120"></i> </span> 
                     </a>
                 </td>
@@ -89,7 +108,7 @@
         @endforeach
 		</tbody>
 	</table>
-	{!! Form::open(array('route' => array('personal.destroy', 'USER_ID'), 'method' => 'DELETE', 'role' => 'form', 'id' => 'form-delete')) !!}
+	{!! Form::open(array('route' => array('matriculas.destroy', 'USER_ID'), 'method' => 'DELETE', 'role' => 'form', 'id' => 'form-delete')) !!}
         {!! Form::close() !!}
 </div>
 

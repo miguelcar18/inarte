@@ -13,6 +13,9 @@
 
 Route::get('/', ['as' => 'principal', 'uses' => 'BackController@index']);
 Route::resource('usuarios', 'UserController');
+Route::resource('disciplinas', 'DisciplinasController');
+Route::resource('matriculas', 'MatriculasController');
+
 Route::resource('mensualidades', 'MensualidadesController');
 Route::resource('constancias', 'ConstanciasController');
 Route::resource('personal', 'PersonalController');
@@ -26,3 +29,6 @@ Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']
 Route::get('restaurar-contrasena', ['as' => 'change_password', 'uses' =>'LoginController@changePassword']);
 Route::post('profile/change-password', ['as' => 'postChangePassword', 'uses' => 'LoginController@postChangePassword']);
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/iconos', function () {
+    return view('iconos');
+});

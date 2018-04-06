@@ -12,25 +12,15 @@
     <table id="sample-table-1" class="table table-striped table-bordered table-hover">
         <tbody>
             <tr>
-                <td colspan="2" align="center">
-                    <div class="span6">
-                        <span class="profile-picture" id="cambiante">
+                <td colspan="2" align="center" style="text-align: center">
+                    <div class="span12">
                             @if($personal->foto == '')
-                            <img id="avatar2" alt="{{ $personal->nombre }} foto" src="{{ asset('uploads/personal/unfile.png') }}" height="50px" width="auto" />
+                            <img id="avatar2" alt="{{ $personal->nombre }} foto" src="{{ asset('uploads/personal/unfile.png') }}" class="img-responsive img-thumbnail" style="height: 250px; width: auto" />
                             @else
-                            <img id="avatar2" alt="{{ $personal->nombre }} foto" src="{{ asset('uploads/personal/'.$personal->foto) }}" height="50px" width="auto" />
+                            <img id="avatar2" alt="{{ $personal->nombre }} foto" src="{{ asset('uploads/personal/'.$personal->foto) }}" class="img-responsive img-thumbnail" style="height: 250px; width: auto" />
                             @endif
-                        </span>
                     </div>
                 </td>
-            </tr>
-            <tr>
-                <th>Nombre y apellido</th>
-                <td>{{ $personal->nombre }}</td>
-            </tr>
-            <tr>
-                <th>Tipo de personal</th>
-                <td>{{ $personal->tipo }}</td>
             </tr>
             <tr>
                 <th>Cargo</th>
@@ -41,8 +31,20 @@
                 <td>{{ $personal->edad }}</td>
             </tr>
             <tr>
-                <th>Tiempo en la empresa</th>
-                <td>{{ $personal->tiempo }}</td>
+                <th>Nombre y apellido</th>
+                <td>{{ $personal->nombre }}</td>
+            </tr>
+            <tr>
+                <th>Cédula</th>
+                <td>{{ number_format($personal->cedula, 0, '', '.') }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de ingreso</th>
+                <td>{{ date_format(date_create($personal->fechaIngreso), 'd/m/Y') }}</td>
+            </tr>
+            <tr>
+                <th>Tipo de personal</th>
+                <td>{{ $personal->tipo }}</td>
             </tr>
             <tr>
                 <th>Teléfono</th>

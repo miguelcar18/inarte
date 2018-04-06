@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMensualidadsTable extends Migration
+class CreateMatriculasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateMensualidadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mensualidades', function (Blueprint $table) {
+        Schema::create('matriculas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cedula');
+            $table->integer('cedula')->nullable();
             $table->string('nombre');
+            $table->integer('cedulaRepresentante')->nullable();
             $table->string('representante')->nullable();
-            $table->string('banco');
-            $table->string('comprobante')->unique();
-            $table->string('mes');
+            $table->date('fechaNacimiento');
+            $table->integer('disciplina')->unsigned();
+            $table->foreign('disciplina')->references('id')->on('disciplinas')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateMensualidadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mensualidades');
+        Schema::dropIfExists('matriculas');
     }
 }

@@ -60,26 +60,26 @@
 			<tr>
 				<th>Cédula</th>
                 <th>Nombre y apellido</th>
-                <th>Mes</th>
+                <th>Mes y año</th>
                 <th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach($mensualidades as $mensualidad)
             <tr>
-                <td class="text-right">{{ number_format($mensualidad->cedula, 0, '', '.') }}</td>
-				<td>{{ $mensualidad->nombre }}</td>
-				<td>{{ $mensualidad->mes }}</td>
+                <td class="text-right">{{ number_format($mensualidad->nombreMatricula->cedula, 0, '', '.') }}</td>
+				<td>{{ $mensualidad->nombreMatricula->nombre }}</td>
+				<td>{{ $mensualidad->mes.' '.$mensualidad->anio }}</td>
                 <td class="hidden-480">
-                    <a href="{{ URL::route('mensualidades.show', $mensualidad->id) }}" data-rel="tooltip" title="Mostrar {{ $mensualidad->cedula }}" objeto="{{ $mensualidad->cedula }}" style="text-decoration:none;" data-id="{{ $mensualidad->id }}"> 
+                    <a href="{{ URL::route('mensualidades.show', $mensualidad->id) }}" data-rel="tooltip" title="Mostrar {{ $mensualidad->nombreMatricula->cedula }}" objeto="{{ $mensualidad->nombreMatricula->cedula }}" style="text-decoration:none;" data-id="{{ $mensualidad->id }}"> 
                         <span class="btn btn-mini btn-info"> <i class="icon-eye-open bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="{{ URL::route('mensualidades.edit', $mensualidad->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $mensualidad->cedula }}" objeto="{{ $mensualidad->cedula }}" style="text-decoration:none;" data-id="{{ $mensualidad->id }}"> 
+                    <a href="{{ URL::route('mensualidades.edit', $mensualidad->id) }}" class="tooltip-success editar" data-rel="tooltip" title="Editar {{ $mensualidad->nombreMatricula->cedula }}" objeto="{{ $mensualidad->nombreMatricula->cedula }}" style="text-decoration:none;" data-id="{{ $mensualidad->id }}"> 
                         <span class="btn btn-mini btn-success"> <i class="icon-pencil bigger-120"></i> </span> 
                     </a>
                     &nbsp;
-                    <a href="#" data-id="{{ $mensualidad->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $mensualidad->cedula }}" objeto="{{ $mensualidad->cedula }}"> 
+                    <a href="#" data-id="{{ $mensualidad->id }}" class="tooltip-error borrar" data-rel="tooltip" title="Eliminar {{ $mensualidad->nombreMatricula->cedula }}" objeto="{{ $mensualidad->nombreMatricula->cedula }}"> 
                         <span class="btn btn-mini btn-danger"> <i class="icon-remove bigger-120"></i> </span> 
                     </a>
                 </td>

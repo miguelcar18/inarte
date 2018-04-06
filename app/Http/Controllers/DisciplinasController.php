@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Sugerencia;
+use App\Disciplina;
 use Illuminate\Http\Request;
-use App\Http\Requests\SugerenciasRequest;
+use App\Http\Requests\DisciplinasRequest;
 use Session;
 use App;
 use Auth;
@@ -14,7 +14,7 @@ use Input;
 use Redirect;
 use Response;
 
-class SugerenciasController extends Controller
+class DisciplinasController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
@@ -27,8 +27,8 @@ class SugerenciasController extends Controller
      */
     public function index()
     {
-        $sugerencias = Sugerencia::All();
-        return view('sugerencias.index', compact('sugerencias'));
+        $disciplinas = Disciplina::All();
+        return view('disciplinas.index', compact('disciplinas'));
     }
 
     /**
@@ -38,7 +38,7 @@ class SugerenciasController extends Controller
      */
     public function create()
     {
-        return view('sugerencias.new');
+        return view('disciplinas.new');
     }
 
     /**
@@ -47,14 +47,14 @@ class SugerenciasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SugerenciasRequest $request)
+    public function store(DisciplinasRequest $request)
     {
         if($request->ajax()){
             $campos = [
                 'nombre'        => $request['nombre'], 
-                'sugerencia'    => $request['sugerencia']
+                'descripcion'   => $request['descripcion']
             ];
-            Sugerencia::create($campos);
+            Disciplina::create($campos);
             return response()->json([
                 'validations' => true
             ]);
@@ -64,42 +64,41 @@ class SugerenciasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Sugerencia  $sugerencia
+     * @param  \App\Disciplina  $disciplina
      * @return \Illuminate\Http\Response
      */
-    public function show(Sugerencia $sugerencia)
+    public function show(Disciplina $disciplina)
     {
-        return view('sugerencias.show', ['sugerencia' => $sugerencia]);
+        return view('disciplinas.show', ['disciplina' => $disciplina]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Sugerencia  $sugerencia
+     * @param  \App\Disciplina  $disciplina
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sugerencia $sugerencia)
+    public function edit(Disciplina $disciplina)
     {
-        return view('sugerencias.edit', ['sugerencia' => $sugerencia]);
+        return view('disciplinas.edit', ['disciplina' => $disciplina]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Sugerencia  $sugerencia
+     * @param  \App\Disciplina  $disciplina
      * @return \Illuminate\Http\Response
      */
-    public function update(SugerenciasRequest $request, Sugerencia $sugerencia)
+    public function update(DisciplinasRequest $request, Disciplina $disciplina)
     {
-        if($request->ajax())
-        {
+        if($request->ajax()){
             $campos = [
                 'nombre'        => $request['nombre'], 
-                'sugerencia'    => $request['sugerencia']
+                'descripcion'   => $request['descripcion'] 
             ];
-            $sugerencia->fill($campos);
-            $sugerencia->save();
+            $disciplina->fill($campos);
+            $disciplina->save();
             return response()->json([
                 'validations'       => true,
                 'nuevoContenido'    => $campos           
@@ -110,26 +109,26 @@ class SugerenciasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Sugerencia  $sugerencia
+     * @param  \App\Disciplina  $disciplina
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sugerencia $sugerencia)
+    public function destroy(Disciplina $disciplina)
     {
-        if (is_null ($sugerencia))
+        if (is_null ($disciplina))
             \App::abort(404);
-        $nombreCompleto = $sugerencia->id;
-        $id = $sugerencia->id;
-        $sugerencia->delete();
+        $nombreCompleto = $disciplina->nombre;
+        $id = $disciplina->id;
+        $disciplina->delete();
         if (\Request::ajax()) {
             return Response::json(array (
                 'success' => true,
-                'msg'     => 'Sugerencia "' . $nombreCompleto .'" eliminada satisfactoriamente',
+                'msg'     => 'Disciplina "' . $nombreCompleto .'" eliminada satisfactoriamente',
                 'id'      => $id
             ));
         } else {
-            $mensaje = 'Sugerencia "'. $nombreCompleto .'" eliminada satisfactoriamente';
+            $mensaje = 'Disciplina "'. $nombreCompleto .'" eliminada satisfactoriamente';
             Session::flash('message', $mensaje);
-            return Redirect::route('sugerencias.index');
+            return Redirect::route('disciplinas.index');
         }
     }
 }

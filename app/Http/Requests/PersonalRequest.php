@@ -29,22 +29,24 @@ class PersonalRequest extends FormRequest
             case 'DELETE': { return []; }
             case 'POST': {
                 return [
-                    'cargo'     => 'required', 
-                    'edad'      => 'required', 
-                    'tiempo'    => 'required',
-                    'telefono'  => 'required', 
-                    'tipo'      => 'required',
-                    'nombre'    => 'required'
+                    'cargo'         => 'required', 
+                    'edad'          => 'required|integer', 
+                    'nombre'        => 'required',
+                    'cedula'        => 'required|integer|unique:personal',
+                    'fechaIngreso'  => 'required',
+                    'telefono'      => 'required|integer', 
+                    'tipo'          => 'required'
                 ];
             }
             case 'PUT': {
                 return [
-                    'cargo'     => 'required', 
-                    'edad'      => 'required', 
-                    'tiempo'    => 'required',
-                    'telefono'  => 'required', 
-                    'tipo'      => 'required',
-                    'nombre'    => 'required'
+                    'cargo'         => 'required', 
+                    'edad'          => 'required|integer', 
+                    'nombre'        => 'required',
+                    'cedula'        => 'required|integer',
+                    'fechaIngreso'  => 'required',
+                    'telefono'      => 'required|integer', 
+                    'tipo'          => 'required'
                 ];
             }
             case 'PATCH': { return []; }
@@ -54,12 +56,15 @@ class PersonalRequest extends FormRequest
 
     public function messages(){
         return [
-            'cargo.required'    => 'El campo :attribute es obligatorio.', 
-            'edad.required'     => 'El campo :attribute es obligatorio.',
-            'tiempo.required'   => 'El campo :attribute es obligatorio.', 
-            'telefono.required' => 'El campo :attribute es obligatorio.', 
-            'tipo.required'     => 'El campo :attribute es obligatorio.', 
-            'nombre.required'   => 'El campo :attribute es obligatorio.', 
+            'cargo.required'        => 'El campo :attribute es obligatorio.', 
+            'edad.required'         => 'El campo :attribute es obligatorio.',
+            'fechaIngreso.required' => 'El campo :attribute es obligatorio.', 
+            'telefono.required'     => 'El campo :attribute es obligatorio.', 
+            'tipo.required'         => 'El campo :attribute es obligatorio.', 
+            'nombre.required'       => 'El campo :attribute es obligatorio.', 
+            'edad.integer'          => 'El campo :attribute solo debe contener números.',
+            'cedula.integer'        => 'El campo :attribute solo debe contener números.',
+            'telefono.integer'      => 'El campo :attribute solo debe contener números.'
         ];
     }
 
@@ -67,10 +72,11 @@ class PersonalRequest extends FormRequest
         return [
             'cargo'         => 'cédula', 
             'edad'          => 'edad',
-            'tiempo'        => 'tiempo en la empresa', 
+            'nombre'        => 'nombre',
+            'cedula'        => 'cédula',
+            'fechaIngreso'  => 'fecha de ingreso', 
             'telefono'      => 'teléfono', 
-            'tipo'          => 'tipo de constancia',
-            'nombre'        => 'nombre'
+            'tipo'          => 'tipo de personal',
         ];
     }
 
