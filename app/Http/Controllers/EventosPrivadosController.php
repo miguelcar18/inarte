@@ -105,7 +105,7 @@ class EventosPrivadosController extends Controller
     public function edit(EventoPrivado $eventoPrivado, $id)
     {
         $eventoPrivado = EventoPrivado::find($id);
-        $matriculas = array('' => "Seleccione");
+        $matriculas = array('' => "Seleccione") + Matricula::where('disciplina', $eventoPrivado->disciplina)->orderBy('nombre','asc')->get()->pluck('cedula_nombre', 'id')->toArray();
         $disciplinas = array('' => "Seleccione") + Disciplina::orderBy('nombre','asc')->pluck('nombre', 'id')->toArray();
         $listado = MatriculasEventoPrivado::where('evento', $eventoPrivado->id)->get();
         return view('eventosPrivados.edit', ['evento' => $eventoPrivado, 'matriculas' => $matriculas, 'listado' => $listado, 'disciplinas' => $disciplinas]);

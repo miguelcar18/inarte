@@ -26,7 +26,7 @@
 				$(this).prev().focus();
 			});
 			
-			$('#file').ace_file_input({
+			$('#foto').ace_file_input({
 				style:'well',
 				btn_choose:'Arrastre la imagen o haga click para elegir',
 				btn_change:null,

@@ -1785,7 +1785,7 @@ $("select.selectDisciplinas").on("change", function(){
             }
         });
     }
-}).change();
+});
 
 function eliminarFila(fila) {
     var valor = fila.parentNode.previousSibling.childNodes[0].value;

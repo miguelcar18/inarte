@@ -20,7 +20,7 @@ class CreatePersonalsTable extends Migration
             $table->integer('edad');
             $table->string('nombre');
             $table->integer('cedula');
-            $table->string('tiempo');
+            $table->date('fechaIngreso');
             $table->string('telefono');
             $table->string('tipo');
             $table->text('eventos')->nullable();
