@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mensualidad;
 use App\Matricula;
+use App\Disciplina;
 use Illuminate\Http\Request;
 use App\Http\Requests\MensualidadesRequest;
 use Session;
@@ -98,7 +99,7 @@ class MensualidadesController extends Controller
      * @param  \App\Mensualidad  $mensualidad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mensualidad $mensualidad, $id)
+    public function update(MensualidadesRequest $request, Mensualidad $mensualidad, $id)
     {
         $mensualidad = Mensualidad::find($id);
         if($request->ajax())
@@ -144,5 +145,26 @@ class MensualidadesController extends Controller
             Session::flash('message', $mensaje);
             return Redirect::route('mensualidades.index');
         }
+    }
+
+    public function morosos(){
+        $disciplinas = array('' => "Seleccione", '0' => "Todas") + Disciplina::orderBy('nombre','asc')->get()->pluck('nombre', 'id')->toArray();
+        return view('mensualidades.consultarMorosos', compact('disciplinas'));
+    }
+
+    public function resultadosMorosos(Request $request){
+        $disciplina = $request['disciplina'];
+        $mes        = $request['mes'];
+        $anio       = $request['anio'];
+
+        if($disciplina == 0){
+            $query = \DB::select("SELECT matriculas.cedula AS cedula, matriculas.nombre AS nombre, disciplinas.nombre AS disciplina, banco  FROM mensualidades RIGHT JOIN matriculas ON mensualidades.matricula = matriculas.id INNER JOIN disciplinas ON matriculas.disciplina = disciplinas.id WHERE (mes = '".$mes."' OR mes is null) AND (anio = '".$anio."' OR anio is null)");
+        } else {
+            $query = \DB::select("SELECT matriculas.cedula AS cedula, matriculas.nombre AS nombre, disciplinas.nombre AS disciplina, banco  FROM mensualidades RIGHT JOIN matriculas ON mensualidades.matricula = matriculas.id INNER JOIN disciplinas ON matriculas.disciplina = disciplinas.id WHERE (mes = '".$mes."' OR mes is null) AND (anio = '".$anio."' OR anio is null) AND disciplina = '".$disciplina."'");
+        }
+
+        return response()->json([
+            'respuesta' => $query
+        ]);
     }
 }

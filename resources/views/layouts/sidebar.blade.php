@@ -96,6 +96,12 @@
 						Agregar
 					</a>
 				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'morosos') class="active" @endif>
+					<a href="{{ URL::route('morosos') }}">
+						<i class="icon-double-angle-right"></i>
+						Consultar deudores
+					</a>
+				</li>
 			</ul>
 		</li>
 		<li @if(Route::getCurrentRoute()->getName() == 'constancias.index' or Route::getCurrentRoute()->getName() == 'constancias.show' or Route::getCurrentRoute()->getName() == 'constancias.edit' or Route::getCurrentRoute()->getName() == 'constancias.create') class="active open" @endif>
@@ -138,6 +144,29 @@
 				</li>
 				<li @if(Route::getCurrentRoute()->getName() == 'eventos.create') class="active" @endif>
 					<a href="{{ URL::route('eventos.create') }}">
+						<i class="icon-double-angle-right"></i>
+						Agregar
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li @if(Route::getCurrentRoute()->getName() == 'eventosPrivados.index' or Route::getCurrentRoute()->getName() == 'eventosPrivados.show' or Route::getCurrentRoute()->getName() == 'eventosPrivados.edit' or Route::getCurrentRoute()->getName() == 'eventosPrivados.create') class="active open" @endif>
+			<a href="#" class="dropdown-toggle">
+				<i class="icon-bullseye"></i>
+				<span class="menu-text"> Eventos Privados</span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li @if(Route::getCurrentRoute()->getName() == 'eventosPrivados.index' or 
+					Route::getCurrentRoute()->getName() == 'eventosPrivados.show' or 
+					Route::getCurrentRoute()->getName() == 'eventosPrivados.edit') class="active" @endif>
+					<a href="{{ URL::route('eventosPrivados.index') }}">
+						<i class="icon-double-angle-right"></i>
+						Listado
+					</a>
+				</li>
+				<li @if(Route::getCurrentRoute()->getName() == 'eventosPrivados.create') class="active" @endif>
+					<a href="{{ URL::route('eventosPrivados.create') }}">
 						<i class="icon-double-angle-right"></i>
 						Agregar
 					</a>

@@ -24,7 +24,7 @@
 				<td>
 					<button type="button" id="editar" name="editar" class="btn btn-success" onclick="document.location.href = '{{ URL::route('sugerencias.edit', $sugerencia->id) }}'"> <i class="icon-pencil bigger-120"></i> Editar</button>
 
-					<button type="button" id="eliminar" name="eliminar" class="btn btn-danger tooltip-error borrar" objeto="{{ $sugerencia->id }}"  onclick="return confirmSubmit(document.forms['form-eliminar-sugerencia'], '¿Está realmente seguro de eliminar este registro?');"><i class="icon-trash position-right"></i> Eliminar</button>
+					<button type="button" id="eliminar" name="eliminar" class="btn btn-danger borrar" objeto="{{ $sugerencia->id }}"  onclick="return confirmSubmit(document.forms['form-eliminar-sugerencia'], '¿Está realmente seguro de eliminar este registro?');"><i class="icon-trash position-right"></i> Eliminar</button>
 				</td>
 			</tr>
         </tbody>

@@ -19,6 +19,7 @@ Route::resource('mensualidades', 'MensualidadesController');
 Route::resource('constancias', 'ConstanciasController');
 Route::resource('personal', 'PersonalController');
 Route::resource('eventos', 'EventosController');
+Route::resource('eventosPrivados', 'EventosPrivadosController');
 Route::resource('cursos', 'CursosController');
 //Route::resource('horarios', 'HorariosController');
 Route::resource('sugerencias', 'SugerenciasController');
@@ -30,3 +31,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/iconos', function () {
     return view('iconos');
 });
+Route::get('/morosos-mensualidades', ['as' => 'morosos', 'uses' => 'MensualidadesController@morosos']);
+Route::post('/morosos-mensualidades', ['as' => 'postMorosos', 'uses' => 'MensualidadesController@resultadosMorosos']);
+Route::get('/selectDisciplina/{id}', ['as' => 'selectDisciplina', 'uses' => 'EventosPrivadosController@busquedaDisciplina']);

@@ -18,8 +18,7 @@ function confirmSubmit(form, message) {
 
 var tablaData = $('.datatable-basic').DataTable({
     "aoColumns": [
-        null, null,null,
-        { "bSortable": false }
+        null, null,null
     ], 
     "oLanguage": {
         "sLengthMenu": "Mostrar _MENU_ ",
@@ -1142,6 +1141,128 @@ $("#changePasswordForm").validate({
     }
 });
 
+$('form#eventoPrivadoForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        fecha: {
+            required: true
+        },
+        lugar: {
+            required: true
+        },
+        nombre: {
+            required: true
+        },
+        empresa: {
+            required: true
+        },
+        disciplina: {
+            required: true
+        }
+    },
+    messages: {
+        fecha: {
+            required: "Ingrese una fehca"
+        },
+        lugar: {
+            required: "Ingrese un lugar"
+        },
+        nombre: {
+            required: "Ingrese un nombre"
+        },
+        empresa: {
+            required: "Ingrese una empresa"
+        },
+        disciplina: {
+            required: "Seleccione una disciplina"
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#eventoPrivadoForm")[0]);
+        $.ajax({
+            url:  $("form#eventoPrivadoForm").attr('action'),
+            type: $("form#eventoPrivadoForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#eventoPrivadoSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(response){
+                var accion = '';
+                var alertMessage = '';
+                var count = 0;
+
+                if(response.validations == false){
+                    $.each(response.errors, function(index, value){
+                        count++;
+                        alertMessage+= count+". "+value+"<br>";
+                    });
+                    $.gritter.add({
+                        title: 'Información',
+                        text: alertMessage,
+                        class_name: 'gritter-error'
+                    });
+                }
+                else if(response.validations == true){
+                    if($("button#eventoPrivadoSubmit").attr('data') == 1)
+                        action = 'agregado';
+                    else if($("button#eventoPrivadoSubmit").attr('data') == 0)
+                        action = 'actualizado';
+                    alertMessage = 'Evento privado '+action+' satisfactoriamente';
+                    $.gritter.add({
+                        title: 'Registrado',
+                        text: alertMessage,
+                        class_name: 'gritter-success'
+                    });
+                    if($("button#eventoPrivadoSubmit").attr('data') == 1){
+                        $('form#eventoPrivadoForm').reset();
+                        $("#tablaParticipantes tbody > tr").remove();
+                        $(document).find('div.success').removeClass('success');
+                        $("#participantes").find("option").prop("disabled", false);
+                    }
+                }
+                $("button#eventoPrivadoSubmit").button('reset');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
 
 $("#formLogin").validate({
     errorElement: 'span',
@@ -1542,6 +1663,129 @@ $('form#sugerenciaForm').validate({
     invalidHandler: function (form) {
     }
 });
+
+$('form#morososMensualidadForm').validate({
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    focusInvalid: false,
+    rules: {
+        mes: {
+            required: true
+        }, 
+        anio: {
+            required: true, 
+            number:true
+        }, 
+        disciplina: {
+            required: true
+        }
+    },
+    messages: {
+        mes: {
+            required: 'Seleccione un mes'
+        }, 
+        anio: {
+            required: 'Ingrese un año', 
+            number: 'Ingrese solo números'
+        }, 
+        disciplina: {
+            required: 'Seleccione una disciplina'
+        }
+    },
+    invalidHandler: function (event, validator) { //display error alert on form submit   
+        $('.alert-error', $('.login-form')).show();
+    },
+
+    highlight: function (e) {
+        $(e).closest('.control-group').removeClass('info').addClass('error');
+    },
+
+    success: function (e) {
+        $(e).closest('.control-group').removeClass('error').addClass('success');
+        $(e).remove();
+    },
+    errorPlacement: function (error, element) {
+        if(element.is(':checkbox') || element.is(':radio')) {
+            var controls = element.closest('.controls');
+            if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+            else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+        }
+        else if(element.is('.select2')) {
+            error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+        }
+        else if(element.is('.chzn-select')) {
+            error.insertAfter(element.siblings('[class*="chzn-container"]:eq(0)'));
+        }
+        else error.insertAfter(element);
+    },
+    submitHandler: function (form) {
+        var token = $("input[name=_token]").val();
+        var formData = new FormData($("form#morososMensualidadForm")[0]);
+        $.ajax({
+            url:  $("form#morososMensualidadForm").attr('action'),
+            type: $("form#morososMensualidadForm").attr('method'),
+            headers: {'X-CSRF-TOKEN' : token},
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend:function(){
+                $("button#morososMensualidadSubmit").addClass('disabled');
+                $("button#cancelar").addClass('disabled');
+            },
+            success:function(respuesta){
+                tablaData.fnClearTable();
+                respuesta.respuesta.forEach(function(element) {
+                    if(element.banco == null){
+                        tablaData.fnAddData([
+                            element.cedula, 
+                            element.nombre, 
+                            element.disciplina
+                        ]);
+                    }
+                });
+                $("button#morososMensualidadSubmit").removeClass('disabled');
+                $("button#cancelar").removeClass('disabled');
+            }
+        })
+        return false;
+    },
+    invalidHandler: function (form) {
+    }
+});
+
+$("select.selectDisciplinas").on("change", function(){
+    var selectselectDisciplinas = $(this);
+    var valor = $(this).val();
+    var url = 'http://'+window.location.host+"/inarte" + '/selectDisciplina/' + valor;
+    if(valor){
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: { _token: $('input[name=token]').val() },
+            dataType: 'json',
+            success: function(respuesta){
+                if(respuesta.correcto){
+                    $("#tablaParticipantes tbody > tr").remove();
+                    var selectMatriculas = '<select id="participantes" class="span6" name="participantes">';
+                    selectMatriculas+='<option value="">Seleccione</option>';
+                    $.each(respuesta.matriculas , function(i, val){
+                        selectMatriculas+= '<option value="'+i+'">'+val+'</option>';
+                    });
+                    selectMatriculas+='</select>';
+                    $('#participantes').empty();
+                    $('#participantes').html(selectMatriculas);
+                } else {
+                    console.log('Sin exito');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if(jqXHR){
+                    console.log(jqXHR);
+                }
+            }
+        });
+    }
+}).change();
 
 function eliminarFila(fila) {
     var valor = fila.parentNode.previousSibling.childNodes[0].value;

@@ -9,7 +9,7 @@
 @section('contenido')
 	<div class="panel panel-flat">
 		<div class="table-responsive">
-			{!! Form::open(['route' => ['mensualidades.destroy', $mensualidad->id], 'method' =>'DELETE', 'id' => 'form-eliminar-mensualidad', 'onSubmit' => 'return confirm(\'\\u00bfEst\\u00e1 realmente seguro(a) de eliminar este registro?\')']) !!}
+			{!! Form::open(['route' => ['mensualidades.destroy', $mensualidad->id], 'method' =>'DELETE', 'id' => 'form-eliminar-usuario', 'onSubmit' => 'return confirm(\'\\u00bfEst\\u00e1 realmente seguro(a) de eliminar este registro?\')']) !!}
 			<table class="table table-bordered table-lg">
 				<tbody>
 					<tr class="active">
@@ -45,7 +45,7 @@
 						<td class="col-md-3 col-sm-4"><b>Acciones</b></td>
 						<td>
 							<button type="button" id="editar" name="editar" class="btn btn-success" onclick="document.location.href = '{{ URL::route('mensualidades.edit', $mensualidad->id) }}'"><i class="icon-pencil7 position-right"></i> Editar</button>
-							<button type="button" id="eliminar" name="eliminar" class="btn btn-danger tooltip-error borrar" objeto="{{ $mensualidad->id }}"  onclick="return confirmSubmit(document.forms['form-eliminar-mensualidad'], '¿Está realmente seguro de eliminar este registro?');"><i class="icon-trash position-right"></i> Eliminar</button>
+							<button type="button" id="eliminar" name="eliminar" class="btn btn-danger borrar" objeto="{{ $mensualidad->id }}"  onclick="return confirmSubmit(document.forms['form-eliminar-usuario'], '¿Está realmente seguro de eliminar este registro?');"><i class="icon-trash position-right"></i> Eliminar</button>
 						</td>
 					</tr>
 				</tbody>
